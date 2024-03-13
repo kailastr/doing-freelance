@@ -1,7 +1,10 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-//components
+//Pages
 import LandingPage from "./pages/LandingPage";
+import ClientIndex from './pages/ClientIndex';
+import FreelancerIndex from './pages/FreelancerIndex';
+import FreelancerProfile from './pages/FreelancerProfile';
 
 
 function App() {
@@ -10,7 +13,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Navigate to='/index' />} />
         <Route path='/index' element={< LandingPage />} />
-        <Route path='/' element={<></>} />
+        <Route path='/client' element={<ClientIndex />} />
+        <Route path='/freelancer' element={<FreelancerIndex />} />
       </Routes>
     </>
   );
