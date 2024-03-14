@@ -1,7 +1,7 @@
 import React from 'react';
 
 //layout
-import ClientPageLayout from '../layouts/ClientPageLayout';
+import ClientPageLayout from '../../layouts/ClientPageLayout';
 
 const ClientIndex = () => {
     return (

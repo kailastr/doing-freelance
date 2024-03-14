@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 
-//layout
-import FreelancerPageLayout from '../layouts/FreelancerPageLayout';
-
 //components
-import GigCard from '../components/Cards/GigCard';
-
-//icons
-import { FaRegHeart } from "react-icons/fa";
+import GigCard from '../../components/Cards/GigCard';
 
 const FreelancerIndex = () => {
 
@@ -56,4 +50,4 @@ const FreelancerIndex = () => {
     )
 }
 
-export default FreelancerPageLayout(FreelancerIndex);
+export default FreelancerIndex;

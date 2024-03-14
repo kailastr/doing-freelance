@@ -2,7 +2,7 @@ import React from 'react'
 
 const GigCard = (props) => {
     return (
-        <div className='bg-red-50 hover:bg-red-100 transition duration-300 ease-in-out my-2 mx-5 rounded-md overflow-hidden'>
+        <div className='bg-red-50 hover:bg-red-100 transition duration-300 ease-in-out my-5 mx-5 rounded-md overflow-hidden'>
             <div className='m-3'>
                 <h2 className='font-semibold text-xl text-red-600'>{props.title}</h2>
                 <p className='text-slate-600'>{props.describtion}</p>

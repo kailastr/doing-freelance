@@ -1,15 +1,16 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-//components
 import FreelancerPageNav from '../components/Navbar/FreelancerPageNav';
 
-const FreelancerPageLayout = (Components) => ({ props }) => {
+const Freelancer = () => {
+
     return (
         <>
             <FreelancerPageNav />
-            <Components {...props} />
+            <Outlet />
         </>
     )
 }
 
-export default FreelancerPageLayout
+export default Freelancer
