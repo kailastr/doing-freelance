@@ -1,16 +1,16 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-//components
+//component
 import ClientPageNav from '../components/Navbar/ClientPageNav'
 
-const ClientPageLayout = (Components) => ({ props }) => {
-
+const Client = () => {
     return (
         <>
             <ClientPageNav />
-            <Components {...props} />
+            <Outlet />
         </>
     )
 }
 
-export default ClientPageLayout
+export default Client
