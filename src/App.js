@@ -12,6 +12,7 @@ import Client from './layouts/Client';
 import ClientIndex from './pages/client/ClientIndex';
 import ClientGigs from './pages/client/ClientGigs';
 import ClientProfile from './pages/client/ClientProfile';
+import ClientGigRequest from './pages/client/ClientGigRequest';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route index element={<ClientIndex />} />
           <Route path='gigs' element={<ClientGigs />} />
           <Route path='profile' element={<ClientProfile />} />
+          <Route path='gigrequest' element={<ClientGigRequest />} />
         </Route>
 
       </Routes>

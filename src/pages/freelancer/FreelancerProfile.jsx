@@ -20,7 +20,8 @@ const FreelancerProfile = () => {
         skills: ["Web Development", "PhotoGraphy", "Photoshop"],
         ExperienceLevel: "Expert",
         PortfolioLink: "",
-        walletAddress: "369#2255"
+        walletAddress: "369#2255",
+        rating: 4
     });
 
     const [experienceLevel, setExperienceLevel] = useState(user.ExperienceLevel);
@@ -141,7 +142,7 @@ const FreelancerProfile = () => {
                                 <div className='flex gap-3'>
                                     <FaRegStar className='my-auto text-lg' />
                                     <h3 className='font-semibold'>Rating</h3>
-                                    <p>4/5</p>
+                                    <p>{user.rating}/5</p>
                                 </div>
                             </div>
                             <div className='flex gap-3 my-3'>
