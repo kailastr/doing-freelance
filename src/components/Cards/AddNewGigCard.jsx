@@ -32,13 +32,13 @@ const AddNewGigCard = () => {
             </div>
             <form onSubmit={formSubmit}>
                 <div className='flex flex-col gap-3 mx-10 my-3'>
-                    <div class="flex gap-3 mx-10 my-3">
-                        <label for="projectTitle" class="text-lg w-3/12 font-medium text-gray-700">Project Title (Keep It Short)</label>
-                        <input type="text" id="projectTitle" name='projectTitle' class="w-9/12 rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm" placeholder="Enter your project title..." />
+                    <div className="flex gap-3 mx-10 my-3">
+                        <label htmlFor="projectTitle" className="text-lg w-3/12 font-medium text-gray-700">Project Title (Keep It Short)</label>
+                        <input type="text" id="projectTitle" name='projectTitle' className="w-9/12 rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm" placeholder="Enter your project title..." />
                     </div>
-                    <div class="flex flex-col gap-3 mx-10 my-3">
-                        <label for="projectDescription" class="text-lg font-medium text-gray-700">Project Description</label>
-                        <textarea id="projectDescription" name='projectDescription' class="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm h-24 resize-none" placeholder="Write a detailed description of your project..."></textarea>
+                    <div className="flex flex-col gap-3 mx-10 my-3">
+                        <label htmlFor="projectDescription" className="text-lg font-medium text-gray-700">Project Description</label>
+                        <textarea id="projectDescription" name='projectDescription' className="rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm h-24 resize-none" placeholder="Write a detailed description of your project..."></textarea>
                     </div>
                     <div className='flex justify-between gap-3 my-3 mx-10'>
                         <div className='flex flex-row gap-3'>
@@ -54,9 +54,9 @@ const AddNewGigCard = () => {
                             <input type="date" id='location' name='location' className='rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm' />
                         </div>
                     </div>
-                    <div class="flex flex-row gap-3 mx-10 my-3">
-                        <label for="skills" class="text-lg font-medium py-2 text-gray-700">Required Skills </label>
-                        <input type="text" id="skills" name='skills' class="w-96 rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm" placeholder="Eg : Reading, Writing,..." />
+                    <div className="flex flex-row gap-3 mx-10 my-3">
+                        <label htmlFor="skills" className="text-lg font-medium py-2 text-gray-700">Required Skills </label>
+                        <input type="text" id="skills" name='skills' className="w-96 rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 shadow-sm" placeholder="Eg : Reading, Writing,..." />
                     </div>
                     <div className='flex justify-center gap-3 my-3 mx-10'>
                         <input type='submit' className='border-2 border-blue-700 w-24 rounded-lg font-semibold hover:bg-blue-200 transition duration-300 ease-in-out px-3 py-2' value={"Submit"} />

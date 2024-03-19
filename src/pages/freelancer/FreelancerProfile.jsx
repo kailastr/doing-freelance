@@ -72,7 +72,6 @@ const FreelancerProfile = () => {
                 walletAddress: document.getElementById('walletAddress').value
             }
         ));
-        console.log("Updated user details:", user);
     };
 
     return (
@@ -234,7 +233,7 @@ const FreelancerProfile = () => {
                                     <input type="text" id='newskill' placeholder="Add new skill" className='flex justify-start font-medium w-8/12 px-3 rounded-md' />
                                     <button
                                         className='mx-5 font-medium bg-slate-300 px-5 rounded-md'
-                                        onClick={() => addSkill(document.getElementById('newSkill').value)}
+                                        onClick={() => addSkill(document.getElementById('newskill').value)}
                                     >
                                         Add
                                     </button>

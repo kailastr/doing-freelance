@@ -1,13 +1,39 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
+//signUp & signIn modal
+import SignUpModal from '../Modal/SignUpModal';
+import SignInModal from '../Modal/SignInModal';
+
+//icons
+import { IoAlertCircleOutline } from "react-icons/io5";
+
+
 const LandingPageNav = () => {
 
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-    console.log(isDropDownOpen);
+
+    const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+
+    const openSignUp = () => {
+        setIsSignUpOpen(true);
+        setIsDropDownOpen(false);
+    }
+
+    const [isSignInOpen, setIsSignInOpen] = useState(false);
+
+    const openSignIn = () => {
+        setIsSignInOpen(true);
+        setIsDropDownOpen(false);
+    }
 
     return (
         <>
+            <div>
+                <SignUpModal isOpen={isSignUpOpen} setIsOpen={setIsSignUpOpen} />
+                <SignInModal isOpen={isSignInOpen} setIsOpen={setIsSignInOpen} />
+            </div>
+
             <div className='flex justify-between bg-red-500 text-white w-full py-6 px-20 sticky top-0'>
                 <div className='font-semibold font-serif text-xl py-2'>
                     DoingFreelance
@@ -23,9 +49,9 @@ const LandingPageNav = () => {
                 {isDropDownOpen && (
                     <div className='absolute right-16 top-20'>
                         <div className=' bg-white text-red-600 flex flex-col px-5 rounded-lg shadow-lg'>
-                            <h3 className='mx-auto py-2 text-lg font-semibold cursor-pointer hover:text-red-400'>Join as Freelancer</h3>
+                            <h3 className='mx-auto py-2 text-lg font-semibold cursor-pointer hover:text-red-400' onClick={openSignUp}>Sign Up</h3>
                             <hr className='mx-auto border-1 border-red-300 w-28' />
-                            <h3 className='mx-auto py-2 text-lg font-semibold cursor-pointer hover:text-red-400'>Join as Client</h3>
+                            <h3 className='mx-auto py-2 text-lg font-semibold cursor-pointer hover:text-red-400' onClick={openSignIn}>Sign In</h3>
                         </div>
                     </div>
                 )}
