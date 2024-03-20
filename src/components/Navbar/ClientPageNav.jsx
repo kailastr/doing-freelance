@@ -12,6 +12,7 @@ const ClientPageNav = () => {
                     <Link to={'/client'} className='font-semibold hover:text-red-200'>Add Gig</Link>
                     <Link to={'/client/gigs'} className='font-semibold hover:text-red-200'>View Your Gigs</Link>
                     <Link to={'/client/gigrequest'} className='font-semibold hover:text-red-200'>View Gig Requests</Link>
+                    <Link to={'/client/submittedgig'} className='font-semibold hover:text-red-200'>Submitted Gigs</Link>
                 </div>
                 <Link to={'/client/profile'}>
                     <img src="https://us.123rf.com/450wm/odkyrylov/odkyrylov2002/odkyrylov200200003/140021006-user-sign-icon-person-symbol-human-avatar-flat-style.jpg" alt="profile icon" className='rounded-full h-10 w-10 cursor-pointer hover:shadow-xl' />

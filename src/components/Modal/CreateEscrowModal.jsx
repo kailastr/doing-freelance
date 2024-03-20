@@ -6,9 +6,12 @@ import { Dialog, Transition } from '@headlessui/react';
 
 const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
 
-    const [deadline, setDeadline] = useState('');
-    const [payRate, setPayRate] = useState('');
+    const [expandModal, setExpandModal] = useState(false);
+
+    const [escrowDeadline, setEscrowDeadline] = useState('');
+    const [createEscrowId, setCreateEscrowId] = useState('');
     const [escrowAmount, setEscrowAmount] = useState('');
+    const [depositEscrowId, setDeopiteEscrowId] = useState('');
 
     function closeModal() {
         setIsOpen(false)
@@ -20,7 +23,7 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
 
     const escrowSubmit = (e) => {
         e.preventDefault();
-        console.log(userId, deadline, payRate, escrowAmount);
+        console.log(userId, createEscrowId, escrowAmount, depositEscrowId);
         closeModal();
         alert("Escrow Successfully created");
     }
@@ -64,24 +67,24 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
                                         <div className='flex flex-col'>
                                             <p className='text-lg font-semibold my-3 text-center'>{`User Id : ${userId}`}</p>
                                             <div className='flex gap-5 items-center my-3'>
-                                                <label htmlFor="deadline" className='text-lg w-5/12 font-semibold'>Deadline : </label>
+                                                <label htmlFor="escrowDeadline" className='text-lg w-5/12 font-semibold'>Escrow Deadline</label>
                                                 <input
                                                     type="date"
-                                                    name="deadline"
-                                                    id="deadline"
+                                                    name="escrowDeadline"
+                                                    id="escrowDeadline"
                                                     className='border border-blue-600 rounded-md py-1 px-2'
-                                                    onChange={(e) => setDeadline(e.target.value)}
+                                                    onChange={(e) => setEscrowDeadline(e.target.value)}
                                                 />
                                             </div>
                                             <div className='flex gap-5 items-center my-3'>
-                                                <label htmlFor="payRate" className='text-lg  w-5/12 font-semibold'>Pay Rate : </label>
+                                                <label htmlFor="CreateEscrowId" className='text-lg w-5/12 font-semibold'>Create Escrow Id : </label>
                                                 <input
                                                     type="text"
-                                                    name="payRate"
-                                                    id="payRate"
-                                                    className='border border-blue-600 rounded-md px-2 py-1'
-                                                    placeholder='In USDT'
-                                                    onChange={(e) => setPayRate(e.target.value)}
+                                                    name="CreateEscrowId"
+                                                    id="CreateEscrowId"
+                                                    className='border border-blue-600 rounded-md py-1 px-2'
+                                                    onChange={(e) => setCreateEscrowId(e.target.value)}
+                                                    placeholder='Enter your escrow Id'
                                                 />
                                             </div>
                                             <div className='flex gap-5 items-center my-3'>
@@ -96,8 +99,25 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
                                                 />
                                             </div>
                                             <div className='my-3'>
-                                                <button type='submit' className='text-lg font-semibold border border-blue-600 w-full py-2 rounded-md bg-blue-100 hover:bg-blue-200'>Send Confirmation</button>
+                                                <div className='text-lg text-center font-semibold border border-blue-600 w-full py-2 rounded-md bg-blue-100 hover:bg-blue-200 cursor-pointer' onClick={() => setExpandModal(true)}>Send Confirmation</div>
                                             </div>
+                                            {expandModal && (
+                                                <div className='my-3'>
+                                                    <p className='my-3 text-lg font-semibold text-center'>Create Escrow Id : {createEscrowId}</p>
+                                                    <div className='flex items-center gap-5'>
+                                                        <label htmlFor="depositeEscrowId" className='text-lg w-5/12 font-semibold'>Create Escrow Id : </label>
+                                                        <input
+                                                            type="text"
+                                                            name="depositeEscrowId"
+                                                            id="depositeEscrowId"
+                                                            className='border border-blue-600 rounded-md py-1 px-2 my-3'
+                                                            onChange={(e) => setDeopiteEscrowId(e.target.value)}
+                                                            placeholder='Enter your escrow Id'
+                                                        />
+                                                    </div>
+                                                    <button type='submit' className='text-lg font-semibold border border-blue-600 w-full py-2 rounded-md bg-blue-100 hover:bg-blue-200'>Send Confirmation</button>
+                                                </div>
+                                            )}
                                         </div>
                                     </form>
                                 </Dialog.Panel>

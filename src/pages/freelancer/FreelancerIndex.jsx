@@ -9,21 +9,37 @@ const FreelancerIndex = () => {
         {
             title: "Web 3 Project",
             describtion: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Et maiores dolore a magnam incidunt accusantium, beatae suscipit cumque atque dignissimos saepe deleniti consequuntur non doloremque ipsa fugiat repellendus sequi nam?",
+            location: "Kochi",
+            posted: "2024-03-27",
+            price: 999,
+            deadline: "2024-03-27",
             prerequisite: ["HTML", "JavaScript", "MongoDB", "Blockchain", "C#"]
         },
         {
             title: "Web 3 Project",
             describtion: "A Freelance working platform",
+            location: "Kochi",
+            posted: "2024-03-27",
+            price: 999,
+            deadline: "2024-03-27",
             prerequisite: ["React", "Angular"]
         },
         {
             title: "Web 3 Project",
             describtion: "A Freelance working platform",
+            location: "Kochi",
+            posted: "2024-03-27",
+            price: 999,
+            deadline: "2024-03-27",
             prerequisite: ["Nodejs", "Express"]
         },
         {
             title: "Web 3 Project",
             describtion: "A Freelance working platform",
+            location: "Kochi",
+            posted: "2024-03-27",
+            price: 999,
+            deadline: "2024-03-27",
             prerequisite: ["React", "Shopify"]
         },
     ]);
@@ -31,7 +47,7 @@ const FreelancerIndex = () => {
     return (
         <>
             <div className='w-full flex justify-center'>
-                <div className='w-11/12 bg-slate-100 mt-20'>
+                <div className='w-11/12 mt-10'>
 
                     <div className='flex justify-center mt-5'>
                         <h1 className='font-semibold text-3xl'><span className='text-red-500'>Gigs</span> You may Like</h1>

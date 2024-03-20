@@ -15,7 +15,7 @@ import ClientIndex from './pages/client/ClientIndex';
 import ClientGigs from './pages/client/ClientGigs';
 import ClientProfile from './pages/client/ClientProfile';
 import ClientGigRequest from './pages/client/ClientGigRequest';
-
+import ClientViewSubmittedGig from './pages/client/ClientViewSubmittedGig';
 
 function App() {
   return (
@@ -36,6 +36,7 @@ function App() {
             <Route path='gigs' element={<ClientGigs />} />
             <Route path='profile' element={<ClientProfile />} />
             <Route path='gigrequest' element={<ClientGigRequest />} />
+            <Route path='submittedgig' element={<ClientViewSubmittedGig />} />
           </Route>
 
         </Routes>

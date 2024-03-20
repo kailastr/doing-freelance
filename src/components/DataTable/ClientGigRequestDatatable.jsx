@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 
 //primereact
 import { DataTable } from 'primereact/datatable';
@@ -195,13 +195,13 @@ const ClientGigRequestDatatable = () => {
 
     const rowExpansionTemplate = (data) => {
         return (
-            <div className="p-3 text-black">
-                <h5 className='font-semibold text-lg'>{data.project} Application</h5>
-                <div>Project Description: {data.description}</div>
-                <div className='font-semibold text-normal'>Languages Known by the user : {data.languagesKnown.join(', ')}</div>
-                <div className='font-semibold text-normal'>User's Skills : {data.skills.join(', ')}</div>
-                <div className='text-semibold flex gap-3'>User Rating: <Rating value={data.rating} readOnly cancel={false} /></div>
-                <div className='text-semibold'>Applied Gig Status: <Tag value={data.appliedGigStatus} severity="info" /></div>
+            <div className="p-3 text-black mx-3 bg-red-100 rounded-md">
+                <h5 className='font-semibold text-lg my-3'>{data.project} Application</h5>
+                <div className='my-2'><span className='font-semibold'>Project Description:</span> {data.description}</div>
+                <div className='font-semibold my-2'>Languages Known by the user : {data.languagesKnown.join(', ')}</div>
+                <div className='font-semibold my-2'>User's Skills : {data.skills.join(', ')}</div>
+                <div className='flex gap-3 my-2'>User Rating: <Rating value={data.rating} readOnly cancel={false} /></div>
+                <div className=' my-2'>Applied Gig Status: <Tag value={data.appliedGigStatus} severity="info" /></div>
                 {data.appliedGigStatus === "Pending" &&
                     (
                         <div className='flex gap-3 mt-2'>
