@@ -7,3 +7,5 @@ Front-end part of a decentralized marketplace utilizing blockchain to connect fr
 2. Tailwind css
 3. React Router DOM
 4. Headless ui
+5. Primereact
+6. React Data-table component
