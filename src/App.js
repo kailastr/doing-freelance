@@ -17,29 +17,33 @@ import ClientProfile from './pages/client/ClientProfile';
 import ClientGigRequest from './pages/client/ClientGigRequest';
 import ClientViewSubmittedGig from './pages/client/ClientViewSubmittedGig';
 
+import { Web3Provider } from './ConnectKit/Web3Provider';
+
 function App() {
   return (
     <>
       <PrimeReactProvider>
-        <Routes>
-          <Route path='/' element={<Navigate to='/index' />} />
-          <Route path='/index' element={< LandingPage />} />
+        <Web3Provider>
+          <Routes>
+            <Route path='/' element={<Navigate to='/index' />} />
+            <Route path='/index' element={< LandingPage />} />
 
-          <Route path='/freelancer' element={<Freelancer />}>
-            <Route index element={<FreelancerIndex />} />
-            <Route path='profile' element={<FreelancerProfile />} />
-            <Route path='appliedGig' element={<FreelancerAppliedGig />} />
-          </Route>
+            <Route path='/freelancer' element={<Freelancer />}>
+              <Route index element={<FreelancerIndex />} />
+              <Route path='profile' element={<FreelancerProfile />} />
+              <Route path='appliedGig' element={<FreelancerAppliedGig />} />
+            </Route>
 
-          <Route path='/client' element={<Client />}>
-            <Route index element={<ClientIndex />} />
-            <Route path='gigs' element={<ClientGigs />} />
-            <Route path='profile' element={<ClientProfile />} />
-            <Route path='gigrequest' element={<ClientGigRequest />} />
-            <Route path='submittedgig' element={<ClientViewSubmittedGig />} />
-          </Route>
+            <Route path='/client' element={<Client />}>
+              <Route index element={<ClientIndex />} />
+              <Route path='gigs' element={<ClientGigs />} />
+              <Route path='profile' element={<ClientProfile />} />
+              <Route path='gigrequest' element={<ClientGigRequest />} />
+              <Route path='submittedgig' element={<ClientViewSubmittedGig />} />
+            </Route>
 
-        </Routes>
+          </Routes>
+        </Web3Provider>
       </PrimeReactProvider>
 
     </>
