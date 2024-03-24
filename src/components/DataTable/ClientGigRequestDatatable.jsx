@@ -15,6 +15,7 @@ import supabase from "../../config/supabaseConfig";
 import CreateEscrow from "../Modal/CreateEscrowModal";
 
 const ClientGigRequestDatatable = () => {
+  const Email = localStorage.getItem("userEmail");
   const [isEscrowOpen, setIsEscrowOpen] = useState(false);
 
   const [escrowUserId, setEscrowUserId] = useState("");
@@ -22,7 +23,12 @@ const ClientGigRequestDatatable = () => {
   const [gigData, setGigdata] = useState([]);
   useEffect(() => {
     const fetchGigs = async () => {
-      const { data, error } = await supabase.from("DF-CreatedGig").select();
+      //   const { data, error } = await supabase.from("DF-CreatedGig").select();
+      const { data, error } = await supabase
+        .from("users") // Replace 'users' with your table name
+        .select("*") // Select the columns you want to fetch
+        .eq("Email", Email) // Filter by the user ID
+        .single();
 
       if (error) {
         setFetchError("could not fetch the existing gigs");
@@ -34,7 +40,7 @@ const ClientGigRequestDatatable = () => {
         console.log(data);
       }
     };
-
+    debugger;
     fetchGigs();
   }, []);
 

@@ -42,8 +42,8 @@ const SignUpModal = ({ isOpen, setIsOpen }) => {
         .from("DF-UserProfile")
         .insert([
           {
-            fullName: name,
             mailId: mail,
+            fullName: name,
             userBio: bio,
             currentLocation: location,
             userType: userType,
@@ -58,9 +58,11 @@ const SignUpModal = ({ isOpen, setIsOpen }) => {
       }
 
       console.log("User data stored:", data);
+      console.log("user-mail:", data[0].mailId);
+      localStorage.setItem("userMail", `${data[0].mailId}`);
       setFormError(null);
 
-      const { user, error } = await supabase.auth.signUp({
+      const { newData, error } = await supabase.auth.signUp({
         email: mail,
         password: password,
       });
@@ -71,7 +73,7 @@ const SignUpModal = ({ isOpen, setIsOpen }) => {
         return;
       }
 
-      console.log("Sign up successful:", user);
+      console.log("Sign up successful:", newData);
 
       if (userType === "freelancer") {
         navigate("/freelancer");

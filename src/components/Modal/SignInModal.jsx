@@ -4,11 +4,13 @@ import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 import supabase from "../../config/supabaseConfig";
+import { useNavigate } from "react-router-dom";
 
 const SignInModal = ({ isOpen, setIsOpen }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigation = useNavigate();
   function closeModal() {
     setIsOpen(false);
   }
@@ -20,7 +22,10 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
     e.preventDefault();
 
     try {
-      const { user, error } = await supabase.auth.signInWithPassword({
+      // debugger;
+      const {
+        data: { user },
+      } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -30,6 +35,8 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
       } else {
         // Sign-in successful, you can perform additional operations here
         console.log("Sign-in successful:", user);
+        navigation("/client");
+        localStorage.setItem("userEmail", `${email}`);
         // Optionally, you can navigate to a different page or show a success message
       }
     } catch (e) {

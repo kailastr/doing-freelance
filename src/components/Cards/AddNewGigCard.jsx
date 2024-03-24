@@ -19,6 +19,7 @@ const AddNewGigCard = () => {
   const [fetchError, setFormError] = useState(null);
 
   const handleSubmit = async (e) => {
+    const Email = localStorage.getItem("userEmail");
     e.preventDefault();
     if (!title || !price || !location || !skills || !description || !date) {
       setFormError("kindly fill all the field to create a gig");
@@ -35,6 +36,7 @@ const AddNewGigCard = () => {
           Location: location,
           Date: date,
           Skills: skills,
+          Email,
         },
       ])
       .select();

@@ -19,12 +19,14 @@ const ClientProfile = () => {
   const [fetchError, setFetchError] = useState(null);
   const [userProfile, setUserProfile] = useState([]);
   const [userId, setUserId] = useState();
+
+  const Email = localStorage.getItem("userEmail");
   useEffect(() => {
     const fetchUser = async () => {
       const { data, error } = await supabase
-        .from("DF-CreatedGig")
-        .select()
-        .eq("id", userId)
+        .from("DF-UserProfile")
+        .select("*")
+        .eq("Email", Email)
         .single();
 
       if (error) {
@@ -103,7 +105,9 @@ const ClientProfile = () => {
     }));
   };
 
-  const SignOut = () => {
+  const SignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    console.log("error:", error);
     localStorage.clear();
   };
 
