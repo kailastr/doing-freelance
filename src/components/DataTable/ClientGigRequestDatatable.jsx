@@ -40,7 +40,7 @@ const ClientGigRequestDatatable = () => {
         console.log(data);
       }
     };
-    debugger;
+    // debugger;
     fetchGigs();
   }, []);
 

@@ -8,7 +8,7 @@ const walletConnectProjectId = process.env.WALLETCONNECT_PROJECT_ID; // Ensure y
 
 export const connectConfig = createConfig(
   getDefaultConfig({
-    chains: [sepolia, polygonMumbai],
+    chains: [polygonMumbai],
     walletConnectProjectId,
     appName: "Doing-Freelance",
   })

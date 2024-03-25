@@ -30,16 +30,23 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
         password,
       });
 
-      if (error) {
-        setError(error.message);
-      } else {
-        // Sign-in successful, you can perform additional operations here
-        console.log("Sign-in successful:", user);
+      const { data, error } = await supabase
+        .from("DF-UserProfile")
+        .select("*")
+        .eq("mailId", email); // Sign-in successful, you can perform additional operations here
+
+      localStorage.setItem("userEmail", `${email}`);
+      const thisMail = localStorage.getItem("userEmail");
+      console.log("thisMail", thisMail);
+      console.log("userData:", data);
+      // debugger;
+      console.log("Sign-in successful:", user);
+      if (data[0].userType === "client") {
         navigation("/client");
-        localStorage.setItem("userEmail", `${email}`);
-        // Optionally, you can navigate to a different page or show a success message
       }
-    } catch (e) {
+      navigation("/freelancer");
+      // Optionally, you can navigate to a different page or show a success message
+    } catch (error) {
       console.error("Sign-in error:", error);
       setError(error.message);
     }

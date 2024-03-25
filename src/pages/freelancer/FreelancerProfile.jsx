@@ -27,8 +27,8 @@ const FreelancerProfile = () => {
   const [fetchBio, setFetchBio] = useState("");
   var bioStored;
 
-  const Email = localStorage.getItem("userMail");
-
+  const Email = localStorage.getItem("userEmail");
+  // debugger;
   useEffect(() => {
     const fetchGigs = async () => {
       try {
@@ -57,9 +57,8 @@ const FreelancerProfile = () => {
   }, [Email]);
   // debugger;
 
-  const handleeSubmit = async () => {
-    const Email = localStorage.getItem("userMail");
-    // e.preventDefault();
+  const handleeSubmit = async (e) => {
+    e.preventDefault();
     if (
       !firstName ||
       !middleName ||
@@ -68,15 +67,16 @@ const FreelancerProfile = () => {
       !portfolio
     ) {
       setFormError("kindly fill all the field to create a gig");
+      console.log("error happened");
       return;
     }
-    console.log("kooi");
     try {
+      console.log("kooi");
       const { data, error } = await supabase
         .from("DF-FreelancerProfile")
         .insert([
           {
-            Email,
+            Email: Email,
             FirstName: firstName,
             MiddleName: middleName,
             LastName: lastName,
@@ -85,14 +85,18 @@ const FreelancerProfile = () => {
             Languages: user.languagesKnown,
             Skills: user.skills,
           },
-        ]);
+        ])
+        .select();
 
       if (error) {
-        setFormError("An error occurred while creating the gig");
-        console.error(error);
-      } else {
+        setFormError("kindly fill all the field to create a gig");
+        console.log(error);
+      }
+      if (data) {
+        console.log(data);
         setFormError(null);
-        setUserData(data[0]); // Assuming you want to store the inserted data in the userData state
+        setUserData(data);
+        console.log("userData:", userData);
       }
     } catch (error) {
       setFormError("An error occurred while creating the gig");
@@ -172,7 +176,9 @@ const FreelancerProfile = () => {
     <>
       <div id="profileView">
         <div className="w-full flex justify-center mt-10">
-          <h1 className="text-xl font-semibold">{`Hey ${userData.FirstName}, Welcome to DoingFreelance`}</h1>
+          <h1 className="text-xl font-semibold">{`Hey ${
+            fetchBio[0] ? fetchBio[0].fullName : "loading"
+          }, Welcome to DoingFreelance`}</h1>
         </div>
 
         {/* profile inpage navigation */}
@@ -218,7 +224,9 @@ const FreelancerProfile = () => {
                 alt="Profile Icon"
                 className="w-36 h-36 mx-auto my-3 rounded-full"
               />
-              <h3 className="mx-auto font-medium text-md">{`Name : ${userData.FirstName} ${userData.MiddleName} ${userData.LastName}`}</h3>
+              <h3 className="mx-auto font-medium text-md">{`Name : ${
+                fetchBio[0] ? fetchBio[0].fullName : "loading"
+              }`}</h3>
               <div className="flex justify-center gap-2">
                 <IoIosInformationCircleOutline
                   className="my-auto text-xl"
@@ -402,6 +410,7 @@ const FreelancerProfile = () => {
                 id="portfolioLink"
                 placeholder="https://...."
                 className="flex justify-start mx-5 mt-3 font-medium w-11/12 px-3 rounded-md py-2"
+                onChange={(e) => setPortfolio(e.target.value)}
               />
 
               <div className="mt-3">
