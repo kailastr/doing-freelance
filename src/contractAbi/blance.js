@@ -1,4 +1,4 @@
-export const blanceAddress = "0xCF77e05a71Cc4882B501e1E87Dce59420943ECbD"
+export const blanceAddress = "0xc25f0EEE4e2b04cce13bFad7A626dd5f491936D4"
 
 
 export const blanceAbi = [
@@ -9,8 +9,12 @@ export const blanceAbi = [
     "name": "BLANCE__DelayedSubmissionNotPermissible",
     "type": "error"
   },
+  { "inputs": [], "name": "BLANCE__EscrowAlreadyExists", "type": "error" },
   { "inputs": [], "name": "BLANCE__EscrowNeedsToBeActive", "type": "error" },
+  { "inputs": [], "name": "BLANCE__EscrowNotActivated", "type": "error" },
   { "inputs": [], "name": "BLANCE__FundReleaseStillOnQueue", "type": "error" },
+  { "inputs": [], "name": "BLANCE__GigCancellationFailed", "type": "error" },
+  { "inputs": [], "name": "BLANCE__GigNotCompletedYet", "type": "error" },
   { "inputs": [], "name": "BLANCE__GigRejected", "type": "error" },
   {
     "inputs": [],
@@ -24,10 +28,16 @@ export const blanceAbi = [
   },
   { "inputs": [], "name": "BLANCE__InvalidReleaseStatus", "type": "error" },
   { "inputs": [], "name": "BLANCE__NoDisputeToResolve", "type": "error" },
+  { "inputs": [], "name": "BLANCE__NoUnAuthorisedAccess", "type": "error" },
   { "inputs": [], "name": "BLANCE__OnlyClientCanAccess", "type": "error" },
   {
     "inputs": [],
     "name": "BLANCE__OnlyClientCanDepositEscrow",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "BLANCE__OnlyClientCanRaiseDispute",
     "type": "error"
   },
   { "inputs": [], "name": "BLANCE__OnlyFreelancerHaveAccess", "type": "error" },
@@ -74,6 +84,43 @@ export const blanceAbi = [
       }
     ],
     "name": "EscrowCancelled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_client",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_freelancer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_deadline",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_escrowAmt",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "_escrowId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "EscrowCreated",
     "type": "event"
   },
   {
@@ -134,16 +181,6 @@ export const blanceAbi = [
     "type": "event"
   },
   {
-    "inputs": [
-      { "internalType": "bytes", "name": "signature", "type": "bytes" },
-      { "internalType": "bytes32", "name": "escrowId", "type": "bytes32" }
-    ],
-    "name": "acceptGig",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "applyGig",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
@@ -163,7 +200,6 @@ export const blanceAbi = [
     "inputs": [
       { "internalType": "address", "name": "_freelancer", "type": "address" },
       { "internalType": "uint256", "name": "_deadline", "type": "uint256" },
-      { "internalType": "uint256", "name": "_payRate", "type": "uint256" },
       { "internalType": "uint256", "name": "_escrowAmount", "type": "uint256" }
     ],
     "name": "createEscrow",
@@ -182,6 +218,17 @@ export const blanceAbi = [
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "freelancerToClientEscrowIds",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "bytes32", "name": "escrowId", "type": "bytes32" }
     ],
     "name": "getEscrowDetails",
@@ -194,7 +241,6 @@ export const blanceAbi = [
             "name": "freelancer",
             "type": "address"
           },
-          { "internalType": "uint256", "name": "s_payRate", "type": "uint256" },
           {
             "internalType": "uint256",
             "name": "escrowAmount",
@@ -221,10 +267,44 @@ export const blanceAbi = [
     "type": "function"
   },
   {
+    "inputs": [
+      { "internalType": "address", "name": "_freelancer", "type": "address" },
+      { "internalType": "address", "name": "_client", "type": "address" }
+    ],
+    "name": "getEscrowIds",
+    "outputs": [
+      { "internalType": "bytes32[]", "name": "", "type": "bytes32[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "escrowId", "type": "bytes32" }
+    ],
+    "name": "getEscrowStatus",
+    "outputs": [
+      { "internalType": "enum BLance.Status", "name": "", "type": "uint8" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "name": "gigAccepted",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "escrowId", "type": "bytes32" }
+    ],
+    "name": "haveDispute",
+    "outputs": [
+      { "internalType": "enum BLance.Status", "name": "", "type": "uint8" }
+    ],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -233,7 +313,6 @@ export const blanceAbi = [
     "outputs": [
       { "internalType": "address", "name": "client", "type": "address" },
       { "internalType": "address", "name": "freelancer", "type": "address" },
-      { "internalType": "uint256", "name": "s_payRate", "type": "uint256" },
       { "internalType": "uint256", "name": "escrowAmount", "type": "uint256" },
       { "internalType": "uint256", "name": "gigStarted", "type": "uint256" },
       { "internalType": "uint256", "name": "deadline", "type": "uint256" },

@@ -7,8 +7,24 @@ import { AiTwotoneDollarCircle } from "react-icons/ai";
 import { readContract, writeContract, getAccount } from "@wagmi/core";
 import { connectConfig } from "../../ConnectKit/Web3Provider";
 import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
+import supabase from "../../config/supabaseConfig";
 
 const GigCard = (props) => {
+  const freelancerApply = async () => {
+    console.log("hii..");
+    console.log("propsdat:", props.id);
+    console.log("localstorage:", localStorage.getItem("userEmail"));
+    const { data, error: storeError } = await supabase
+      .from("DF-FreelancerAppliedGigs")
+      .insert([
+        {
+          gig_id: props.id,
+          freelancer_email: localStorage.getItem("userEmail"),
+        },
+      ])
+      .select();
+    console.log("data:", data);
+  };
   const applyGig = async () => {
     const account = getAccount(connectConfig);
     console.log("account:", account);
@@ -18,6 +34,7 @@ const GigCard = (props) => {
       address: blanceAddress, // Assuming this is correctly defined
       functionName: "applyGig",
     });
+    await freelancerApply();
     console.log("Hii..");
 
     console.log("function caller:", transaction);

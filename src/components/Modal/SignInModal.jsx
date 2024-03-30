@@ -42,9 +42,11 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
       // debugger;
       console.log("Sign-in successful:", user);
       if (data[0].userType === "client") {
+        console.log("heyy...");
         navigation("/client");
+      } else {
+        navigation("/freelancer");
       }
-      navigation("/freelancer");
       // Optionally, you can navigate to a different page or show a success message
     } catch (error) {
       console.error("Sign-in error:", error);
