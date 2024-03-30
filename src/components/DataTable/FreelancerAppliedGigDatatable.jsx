@@ -69,7 +69,7 @@ const FreelancerAppliedGigDatatable = () => {
             ExperienceLevel: "Expert",
             walletAddress: "369#2255",
             rating: 4,
-            appliedGigStatus: "Pending"
+            appliedGigStatus: "Submitted"
         },
         {
             project: "Flutter app",
@@ -186,8 +186,14 @@ const FreelancerAppliedGigDatatable = () => {
             setIsSubmitEscrowOpen(true);
             setEscrowUserId(rowData.name);
             setExpandedRows(null);
-            updateGigStatus(rowData, "Completed");
+            updateGigStatus(rowData, "Submitted");
         }
+    };
+
+    const ViewPaymentStatus = (rowData) => {
+        setEscrowUserId(rowData.name);
+        setExpandedRows(null);
+        updateGigStatus(rowData, "Completed");
     };
 
     const updateGigStatus = (rowData, status) => {
@@ -216,6 +222,13 @@ const FreelancerAppliedGigDatatable = () => {
                         <div className='gap-3 mt-2'>
                             <div className='font-semibold text-md my-2'>Deadline : {differenceInDays} more days</div>
                             <button className='bg-blue-300 hover:bg-blue-400 border-2 hover:border-blue-500 hover:shadow-md px-3 py-1 rounded-md' onClick={() => SubmitProject(data)}>Submit Project</button>
+                        </div>
+                    )
+                }
+                {data.appliedGigStatus === "Submitted" &&
+                    (
+                        <div className='gap-3 mt-2'>
+                            <button className='bg-blue-300 hover:bg-blue-400 border-2 hover:border-blue-500 hover:shadow-md px-3 py-1 rounded-md' onClick={() => ViewPaymentStatus(data)}>Credit Payment</button>
                         </div>
                     )
                 }
