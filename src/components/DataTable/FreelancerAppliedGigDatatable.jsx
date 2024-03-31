@@ -22,6 +22,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Web 3 project",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -35,6 +36,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Static web",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -48,6 +50,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Python Project",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -61,6 +64,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Embedded Programmer",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -74,6 +78,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Flutter app",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -87,6 +92,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Blockchain Dev",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -100,6 +106,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Web 3 project",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -113,6 +120,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Static web",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -126,6 +134,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Python Project",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -139,6 +148,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Embedded Programmer",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -152,6 +162,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Flutter app",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -165,6 +176,7 @@ const FreelancerAppliedGigDatatable = () => {
         {
             project: "Blockchain Dev",
             deadline: "2024-03-27",
+            escrowId: "369",
             name: "Allen",
             description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
             badgeCoins: 650,
@@ -249,6 +261,7 @@ const FreelancerAppliedGigDatatable = () => {
                 <Column expander style={{ width: '3rem' }} />
                 <Column field="project" header="Project" />
                 <Column field="deadline" header="Deadline" />
+                <Column field='escrowId' header="Escrow Id" />
                 <Column field="appliedGigStatus" header="Application Status" />
             </DataTable>
             <SubmitEscrowProject isOpen={isSubmitEscrowOpen} setIsOpen={setIsSubmitEscrowOpen} userId={escrowUserId} />

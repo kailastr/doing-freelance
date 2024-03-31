@@ -228,6 +228,12 @@ const ClientGigRequestDatatable = () => {
     }
   };
 
+  const deposieEscrow = (rowData) => {
+    alert("Escrow Amount Deposited");
+    setExpandedRows(null);
+    updateGigStatus(rowData, "Completed");
+  };
+
   const updateGigStatus = (rowData, status) => {
     const updatedData = gigRequestData.map((item) =>
       item === rowData ? { ...item, appliedGigStatus: status } : item
@@ -268,7 +274,7 @@ const ClientGigRequestDatatable = () => {
             </button>
             <button
               className="bg-red-300 hover:bg-red-400 border-2 hover:border-red-500 hover:shadow-md px-3 py-1 rounded-md"
-              onClick={RejectGig}
+              onClick={() => RejectGig(data)}
             >
               Reject
             </button>
@@ -278,9 +284,16 @@ const ClientGigRequestDatatable = () => {
           <div className="flex gap-3 mt-2">
             <button
               className="bg-red-300 hover:bg-red-400 border-2 hover:border-red-500 hover:shadow-md px-3 py-1 rounded-md"
-              onClick={RejectGig}
+              onClick={() => RejectGig(data)}
             >
               Reject
+            </button>
+
+            <button
+              className="bg-blue-300 hover:bg-blue-400 border-2 hover:border-blue-500 hover:shadow-md px-3 py-1 rounded-md"
+              onClick={() => deposieEscrow(data)}
+            >
+              Deposite Escrow
             </button>
           </div>
         )}
