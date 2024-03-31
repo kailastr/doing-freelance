@@ -4,9 +4,7 @@ import { Navigate } from 'react-router-dom';
 //signUp & signIn modal
 import SignUpModal from '../Modal/SignUpModal';
 import SignInModal from '../Modal/SignInModal';
-
-//icons
-import { IoAlertCircleOutline } from "react-icons/io5";
+import MediatorSignInModal from '../Modal/MediatorSignInModal';
 
 
 const LandingPageNav = () => {
@@ -27,11 +25,19 @@ const LandingPageNav = () => {
         setIsDropDownOpen(false);
     }
 
+    const [isMediatorModalOpen, setIsMediatorModalOpen] = useState(false);
+
+    const openMediatorModal = () => {
+        setIsMediatorModalOpen(true);
+        setIsDropDownOpen(false);
+    }
+
     return (
         <>
             <div>
                 <SignUpModal isOpen={isSignUpOpen} setIsOpen={setIsSignUpOpen} />
                 <SignInModal isOpen={isSignInOpen} setIsOpen={setIsSignInOpen} />
+                <MediatorSignInModal isOpen={isMediatorModalOpen} setIsOpen={setIsMediatorModalOpen} />
             </div>
 
             <div className='flex justify-between bg-red-500 text-white w-full py-6 px-20 sticky top-0 z-50'>
@@ -52,6 +58,8 @@ const LandingPageNav = () => {
                             <h3 className='mx-auto py-2 text-lg font-semibold cursor-pointer hover:text-red-400' onClick={openSignUp}>Sign Up</h3>
                             <hr className='mx-auto border-1 border-red-300 w-28' />
                             <h3 className='mx-auto py-2 text-lg font-semibold cursor-pointer hover:text-red-400' onClick={openSignIn}>Sign In</h3>
+                            <hr className='mx-auto border-1 border-red-300 w-28' />
+                            <h3 className='mx-auto py-2 text-lg font-semibold cursor-pointer hover:text-red-400' onClick={openMediatorModal}>Mediator</h3>
                         </div>
                     </div>
                 )}
