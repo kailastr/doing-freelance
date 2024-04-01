@@ -1,4 +1,5 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import { watchContractEvent } from "@wagmi/core";
 
 //headless ui modal
 import { Dialog, Transition } from "@headlessui/react";
@@ -15,6 +16,31 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
   const [escrowAmount, setEscrowAmount] = useState("");
   const [depositEscrowId, setDeopiteEscrowId] = useState("");
 
+  const numSeconds = 86400;
+
+  const fetchGigId = async () => {
+    const { data, error } = await supabase
+      .from("DF-FreelancerAppliedGigs") // Replace 'users' with your table name
+      .select(
+        `
+    id,
+    gig_id,
+    DF-CreatedGig (
+      *
+    )
+  `
+      );
+    console.log("freelancerGigData", data);
+    var gigIdIndex = data.length - 1;
+    console.log("data-length:", gigIdIndex);
+    const gigId = data[gigIdIndex].gig_id;
+    console.log("GIGID:", gigId);
+    localStorage.setItem("gig_id", gigId);
+  };
+  useEffect(() => {
+    fetchGigId();
+  }, []);
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -22,6 +48,55 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
   function openModal() {
     setIsOpen(true);
   }
+  // ("0x55ef2dc8a312e2149876a371663148fd291bb68e7f62e62073c669059d90d4ab");
+  // ("0x19290a27e9f213c86c61c2ad7a0b90badbafc34f37dda391a70727a20c1ffe12");
+  const watchEvent = async () => {
+    console.log("eventinte ullil...");
+    watchContractEvent(connectConfig, {
+      abi: blanceAbi,
+      address: blanceAddress,
+      eventName: "EscrowCreated",
+      onLogs(logs) {
+        console.log("New logs!:", logs);
+        if (logs.length > 0) {
+          const escrowId = logs[0].args._escrowId;
+          const escrowAmount = logs[0].args._escrowAmt;
+          localStorage.setItem("escrowId", escrowId);
+          localStorage.setItem("escrowAmt", escrowAmount);
+
+          console.log("Escrow ID:", escrowId);
+        }
+      },
+      onError(error) {
+        console.error("Logs error", error);
+      },
+    });
+    setTimeout(async () => {
+      const escrowId = localStorage.getItem("escrowId");
+      const giigId = localStorage.getItem("gig_id");
+      localStorage.removeItem("escrowId");
+      localStorage.removeItem("gig_id");
+
+      console.log("fetched-gigIdAfter:", giigId);
+      console.log("fetched-escrowIdAfter:", escrowId);
+      const { data, error } = await supabase
+        .from("DF-FreelancerAppliedGigs")
+        .update({
+          status: "Accepted",
+          escrow_id: escrowId,
+          escrow_amount: escrowAmount,
+        })
+        .eq("gig_id", giigId)
+        .select();
+
+      if (error) {
+        console.error("Error updating column:", error);
+      } else {
+        console.log("Enum column updated successfully:", data);
+      }
+    }, 10000);
+  };
+
   var createdEscrowId;
   const createEscrow = async () => {
     const escrowTx = await writeContract(connectConfig, {
@@ -30,32 +105,10 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
       functionName: "createEscrow",
       args: [freelancerAddr, escrowDeadline, escrowAmount],
     });
-    createdEscrowId = escrowTx;
-    console.log("ecsroowId:", createdEscrowId);
-    console.log("escrowId:", escrowTx);
-    localStorage.setItem("escrowIdd", escrowTx);
-    if (escrowTx.length !== 0) {
-      const { data, error } = await supabase
-        .from("DF-FreelancerAppliedGigs")
-        .update({ status: "Accepted" })
-        .eq("id", 2)
-        .select();
-      if (error) {
-        console.error("Error updating enum column:", error);
-      } else {
-        console.log("Enum column updated successfully:", data);
-      }
-    }
-  };
-  const escrowDeposit = async () => {
-    const escrowId = localStorage.getItem("escrowIdd");
-    const escrowTx = await writeContract(connectConfig, {
-      abi: blanceAbi,
-      address: blanceAddress,
-      functionName: "escrowDeposited",
-      args: [escrowId],
-    });
-    console.log("escrowId:", escrowTx);
+    console.log("escrowDeadline:", escrowDeadline);
+
+    await watchEvent();
+    setTimeout(async () => {}, 3000);
   };
 
   const account = getAccount(connectConfig);
@@ -133,7 +186,9 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
                           name="escrowDeadline"
                           id="escrowDeadline"
                           className="border border-blue-600 rounded-md py-1 px-2"
-                          onChange={(e) => setEscrowDeadline(e.target.value)}
+                          onChange={(e) =>
+                            setEscrowDeadline(e.target.value * numSeconds)
+                          }
                           placeholder="Num of days until the deadline"
                         />
                       </div>
@@ -170,7 +225,6 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
                           <button
                             type="submit"
                             className="text-lg font-semibold border border-blue-600 w-full py-2 rounded-md bg-blue-100 hover:bg-blue-200"
-                            onClick={() => escrowDeposit()}
                           >
                             Deposit Escrow-Amount
                           </button>

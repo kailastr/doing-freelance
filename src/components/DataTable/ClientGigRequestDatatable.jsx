@@ -10,6 +10,10 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 
 import supabase from "../../config/supabaseConfig";
+import { writeContract } from "@wagmi/core";
+import { parseEther } from "viem";
+import { connectConfig } from "../../ConnectKit/Web3Provider";
+import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
 
 //escrow modal component
 import CreateEscrow from "../Modal/CreateEscrowModal";
@@ -28,6 +32,8 @@ const ClientGigRequestDatatable = () => {
         .from("DF-FreelancerAppliedGigs") // Replace 'users' with your table name
         .select(
           `
+        escrow_id,
+        escrow_amount,
         id,
         gig_id,
         status,
@@ -41,6 +47,16 @@ const ClientGigRequestDatatable = () => {
       `
         );
       console.log("gigData", data);
+      /**supabase
+    .from("user_points")
+    .select("address, pending_points")
+    .eq("pending_points", MINIMUM_TRANSFER_SIZE); 
+    const { data, error } = await supabase
+      .from("user_points")
+      .select("*")
+      .eq("address", address)
+      .single();
+    */
 
       const processedData = data?.map((item) => ({
         project: item?.["DF-CreatedGig"]?.Title,
@@ -54,6 +70,16 @@ const ClientGigRequestDatatable = () => {
         rating: 4,
         appliedGigStatus: item?.status,
       }));
+      const gigDataIndex = data.length - 1;
+      console.log("gigDataIndex:", gigDataIndex);
+      const escrowId = data[gigDataIndex].escrow_id;
+      console.log("fetchedEscrowId:", escrowId);
+      const escrowAmount = data[gigDataIndex].escrow_amount;
+      console.log("fetchedEscrowAmt:", escrowAmount);
+
+      localStorage.setItem("freelancerEscrwId", escrowId);
+      localStorage.setItem("freelancerEscrwAmt", escrowAmount);
+
       setGigRequestData(processedData);
       if (error) {
         setFetchError("could not fetch the existing gigs");
@@ -92,6 +118,31 @@ const ClientGigRequestDatatable = () => {
       setExpandedRows(null);
       updateGigStatus(rowData, "Rejected");
     }
+  };
+
+  const escrowDeposit = async () => {
+    const escrowId = localStorage.getItem("freelancerEscrwId");
+    const escrowAmount = localStorage.getItem("freelancerEscrwAmt");
+    localStorage.removeItem("freelancerEscrwId");
+    localStorage.removeItem("freelancerEscrwAmt");
+    console.log("escrowAmt type:", typeof escrowAmount);
+    const actualEscrwAmt = parseInt(escrowAmount, 10);
+    console.log("actual-escrwAmt:", actualEscrwAmt);
+    console.log("actual-escrowAmt type:", typeof actualEscrwAmt);
+
+    const escrowTx = await writeContract(connectConfig, {
+      abi: blanceAbi,
+      address: blanceAddress,
+      functionName: "escrowDeposited",
+      args: [escrowId],
+      value: actualEscrwAmt,
+    });
+  };
+  const depositEscrow = (rowData) => {
+    escrowDeposit();
+    alert("Escrow Amount Deposited");
+    setExpandedRows(null);
+    updateGigStatus(rowData, "Completed");
   };
 
   const updateGigStatus = (rowData, status) => {
@@ -134,7 +185,7 @@ const ClientGigRequestDatatable = () => {
             </button>
             <button
               className="bg-red-300 hover:bg-red-400 border-2 hover:border-red-500 hover:shadow-md px-3 py-1 rounded-md"
-              onClick={RejectGig}
+              onClick={() => RejectGig(data)}
             >
               Reject
             </button>
@@ -144,9 +195,16 @@ const ClientGigRequestDatatable = () => {
           <div className="flex gap-3 mt-2">
             <button
               className="bg-red-300 hover:bg-red-400 border-2 hover:border-red-500 hover:shadow-md px-3 py-1 rounded-md"
-              onClick={RejectGig}
+              onClick={() => RejectGig(data)}
             >
               Reject
+            </button>
+
+            <button
+              className="bg-blue-300 hover:bg-blue-400 border-2 hover:border-blue-500 hover:shadow-md px-3 py-1 rounded-md"
+              onClick={() => depositEscrow(data)}
+            >
+              Deposit Escrow
             </button>
           </div>
         )}

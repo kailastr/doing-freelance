@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-//primereact
+// primereact
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Rating } from "primereact/rating";
@@ -9,237 +9,89 @@ import { Toast } from "primereact/toast";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 
-//escrow modal component
+// escrow modal component
 import SubmitEscrowProject from "../Modal/SubmitEscrowProject";
 import supabase from "../../config/supabaseConfig";
+import { writeContract } from "@wagmi/core";
+import { connectConfig } from "../../ConnectKit/Web3Provider";
+import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
 
-const FreelancerAppliedGigDatatable = async () => {
+const FreelancerAppliedGigDatatable = () => {
   const [isSubmitEscrowOpen, setIsSubmitEscrowOpen] = useState(false);
-
   const [escrowUserId, setEscrowUserId] = useState("");
   const [gigApplicationData, setGigApplicationData] = useState([]);
-  const { data, error } = await supabase
-    .from("DF-FreelancerAppliedGigs") // Replace 'users' with your table name
-    .select(
-      `
-    id,
-    gig_id,
-    status,
-    freelancer_email,
-    DF-FreelancerProfile (
-      *
-    ),
-    DF-CreatedGig (
-      *
-    )
-  `
-    );
-  console.log("gigData", data);
-
-  // const processedData = data?.map((item) => ({
-  //   project: item?.["DF-CreatedGig"]?.Title,
-  //   name: item?.["DF-FreelancerProfile"]?.FirstName,
-  //   description: item?.["DF-CreatedGig"]?.Description,
-  //   badgeCoins: 650,
-  //   languagesKnown: item?.["DF-FreelancerProfile"]?.Languages,
-  //   skills: item?.["DF-FreelancerProfile"]?.Skills,
-  //   ExperienceLevel: item?.["DF-FreelancerProfile"]?.ExperienceLevel,
-  //   walletAddress: "233232",
-  //   rating: 4,
-  //   appliedGigStatus: item?.status,
-  // }));
-  // setGigApplicationData(processedData);
-
-  setGigApplicationData(
-    data?.map((item) => ({
-      project: item?.["DF-CreatedGig"]?.Title,
-      name: item?.["DF-FreelancerProfile"]?.FirstName,
-      description: item?.["DF-CreatedGig"]?.Description,
-      badgeCoins: 650,
-      languagesKnown: item?.["DF-FreelancerProfile"]?.Languages,
-      skills: item?.["DF-FreelancerProfile"]?.Skills,
-      ExperienceLevel: item?.["DF-FreelancerProfile"]?.ExperienceLevel,
-      walletAddress: "233232",
-      rating: 4,
-      appliedGigStatus: item?.status,
-    }))
-  );
-
-  //   const [gigApplicationData, setGigApplicationData] = useState([
-  //     {
-  //       project: "Web 3 project",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Pending",
-  //     },
-  //     {
-  //       project: "Static web",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 3,
-  //       appliedGigStatus: "Accepted",
-  //     },
-  //     {
-  //       project: "Python Project",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 5,
-  //       appliedGigStatus: "Rejected",
-  //     },
-  //     {
-  //       project: "Embedded Programmer",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Pending",
-  //     },
-  //     {
-  //       project: "Flutter app",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Completed",
-  //     },
-  //     {
-  //       project: "Blockchain Dev",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Pending",
-  //     },
-  //     {
-  //       project: "Web 3 project",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Pending",
-  //     },
-  //     {
-  //       project: "Static web",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Pending",
-  //     },
-  //     {
-  //       project: "Python Project",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Pending",
-  //     },
-  //     {
-  //       project: "Embedded Programmer",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Pending",
-  //     },
-  //     {
-  //       project: "Flutter app",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Pending",
-  //     },
-  //     {
-  //       project: "Blockchain Dev",
-  //       deadline: "2024-03-27",
-  //       name: "Allen",
-  //       description:
-  //         "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-  //       badgeCoins: 650,
-  //       languagesKnown: ["English", "Malayalam", "Hindi"],
-  //       skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-  //       ExperienceLevel: "Expert",
-  //       walletAddress: "369#2255",
-  //       rating: 4,
-  //       appliedGigStatus: "Pending",
-  //     },
-  //   ]);
-
   const [expandedRows, setExpandedRows] = useState(null);
   const toast = useRef(null);
 
-  const SubmitProject = (rowData) => {
+  useEffect(() => {
+    const fetchGigData = async () => {
+      const { data, error } = await supabase
+        .from("DF-FreelancerAppliedGigs")
+        .select(
+          `
+          escrow_id,
+          id,
+          gig_id,
+          status,
+          freelancer_email,
+          DF-FreelancerProfile (
+            *
+          ),
+          DF-CreatedGig (
+            *
+          )
+        `
+        );
+      console.log("fetchingData:", data);
+
+      if (error) {
+        console.error("Error fetching gig data:", error);
+      } else {
+        const gigData = data?.map((item) => ({
+          project: item?.["DF-CreatedGig"]?.Title,
+          name: item?.["DF-FreelancerProfile"]?.FirstName,
+          deadline: item?.["DF-CreatedGig"]?.Date,
+          escrowId: item?.escrow_id,
+          description: item?.["DF-CreatedGig"]?.Description,
+          badgeCoins: 650,
+          languagesKnown: item?.["DF-FreelancerProfile"]?.Languages,
+          skills: item?.["DF-FreelancerProfile"]?.Skills,
+          ExperienceLevel: item?.["DF-FreelancerProfile"]?.ExperienceLevel,
+          walletAddress: "233232",
+          rating: 4,
+          appliedGigStatus: item?.status,
+        }));
+
+        setGigApplicationData(gigData);
+        const gigDataIndex = gigData.length - 1;
+        console.log("gigDataIndex:", gigDataIndex);
+        const escrowId = gigData[gigDataIndex].escrowId;
+        localStorage.setItem("freelancerEscrowId", escrowId);
+
+        console.log("gigData:", gigData);
+      }
+    };
+
+    fetchGigData();
+  }, []);
+  const SubmitProject = async (rowData) => {
+    const escrowId = localStorage.getItem("freelancerEscrowId");
+    localStorage.removeItem("freelancerEscrowId");
+    const submitGig = await writeContract(connectConfig, {
+      abi: blanceAbi,
+      address: blanceAddress,
+      functionName: "submitFinishedGig",
+      args: [escrowId],
+    });
+    // const { data, error } = await supabase
+    // .from("DF-FreelancerAppliedGigs")
+    // .update({
+    //   status: "Accepted",
+    //   escrow_id: escrowId,
+    //   escrow_amount: escrowAmount,
+    // })
+    // .eq("gig_id", giigId)
+    // .select();
     const confirmation = window.confirm(
       "Is your project completed to submit ?"
     );
@@ -247,8 +99,14 @@ const FreelancerAppliedGigDatatable = async () => {
       setIsSubmitEscrowOpen(true);
       setEscrowUserId(rowData.name);
       setExpandedRows(null);
-      updateGigStatus(rowData, "Completed");
+      updateGigStatus(rowData, "Submitted");
     }
+  };
+
+  const ViewPaymentStatus = (rowData) => {
+    setEscrowUserId(rowData.name);
+    setExpandedRows(null);
+    updateGigStatus(rowData, "Completed");
   };
 
   const updateGigStatus = (rowData, status) => {
@@ -293,6 +151,16 @@ const FreelancerAppliedGigDatatable = async () => {
             </button>
           </div>
         )}
+        {data.appliedGigStatus === "Submitted" && (
+          <div className="gap-3 mt-2">
+            <button
+              className="bg-blue-300 hover:bg-blue-400 border-2 hover:border-blue-500 hover:shadow-md px-3 py-1 rounded-md"
+              onClick={() => ViewPaymentStatus(data)}
+            >
+              Credit Payment
+            </button>
+          </div>
+        )}
       </div>
     );
   };
@@ -314,6 +182,7 @@ const FreelancerAppliedGigDatatable = async () => {
         <Column expander style={{ width: "3rem" }} />
         <Column field="project" header="Project" />
         <Column field="deadline" header="Deadline" />
+        <Column field="escrowId" header="Escrow Id" />
         <Column field="appliedGigStatus" header="Application Status" />
       </DataTable>
       <SubmitEscrowProject

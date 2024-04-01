@@ -191,7 +191,18 @@ const ClientViewSubmittedGigDatatable = () => {
   const [expandedRows, setExpandedRows] = useState(null);
   const toast = useRef(null);
 
-  const AcceptGig = (rowData) => {
+  const releaseFund = (rowData) => {
+    const confirmation = window.confirm(
+      "Are you sure you want to release the escrow fund ?"
+    );
+    if (confirmation) {
+      // setEscrowUserId(rowData.name);
+      setExpandedRows(null);
+      updateGigStatus(rowData, "Completed");
+    }
+  };
+
+  const raiseDispute = (rowData) => {
     const confirmation = window.confirm(
       "Are you sure you want to accept this gig request ?"
     );
@@ -202,6 +213,8 @@ const ClientViewSubmittedGigDatatable = () => {
       updateGigStatus(rowData, "Completed");
     }
   };
+
+
 
   const updateGigStatus = (rowData, status) => {
     const updatedData = gigRequestData.map((item) =>
@@ -228,10 +241,16 @@ const ClientViewSubmittedGigDatatable = () => {
         {data.appliedGigStatus === "Pending" && (
           <div className="flex gap-3 mt-2">
             <button
-              className="bg-blue-200 hover:bg-blue-300 border-2 border-blue-400 hover:border-blue-500 hover:shadow-md px-3 py-1 rounded-md"
-              onClick={() => AcceptGig(data)}
+              className="bg-red-200 hover:bg-red-300 border-2 border-red-400 hover:border-red-500 hover:shadow-md px-3 py-1 rounded-md"
+              onClick={() => raiseDispute(data)}
             >
               Raise Dispute
+            </button>
+            <button
+              className="bg-blue-200 hover:bg-blue-300 border-2 border-blue-400 hover:border-blue-500 hover:shadow-md px-3 py-1 rounded-md"
+              onClick={() => releaseFund(data)}
+            >
+              Release Fund
             </button>
           </div>
         )}

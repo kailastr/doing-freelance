@@ -30,7 +30,7 @@ const ClientProfile = () => {
         .single();
 
       if (error) {
-        setFetchError("could not fetch the existing gigs");
+        setFetchError("could not fetch the profile ");
         console.log(error);
       }
       if (data) {

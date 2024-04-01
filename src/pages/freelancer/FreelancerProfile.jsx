@@ -220,7 +220,7 @@ const FreelancerProfile = () => {
             )}
             <div className="w-4/12 flex flex-col my-auto px-3 border-r-2 border-red-500">
               <img
-                src="https://us.123rf.com/450wm/odkyrylov/odkyrylov2002/odkyrylov200200003/140021006-user-sign-icon-person-symbol-human-avatar-flat-style.jpg"
+                src="https://thumbs.dreamstime.com/b/d-man-avatar-happy-smiling-face-icon-young-businessman-student-freelancer-realistic-cartoon-character-vector-illustration-253767213.jpg"
                 alt="Profile Icon"
                 className="w-36 h-36 mx-auto my-3 rounded-full"
               />
@@ -316,7 +316,7 @@ const FreelancerProfile = () => {
             <div className="flex justify-center mt-5">
               {/* <h3 className='text-lg font-medium'>Want to update your profile ?</h3> */}
               <img
-                src="https://us.123rf.com/450wm/odkyrylov/odkyrylov2002/odkyrylov200200003/140021006-user-sign-icon-person-symbol-human-avatar-flat-style.jpg"
+                src="https://thumbs.dreamstime.com/b/d-man-avatar-happy-smiling-face-icon-young-businessman-student-freelancer-realistic-cartoon-character-vector-illustration-253767213.jpg"
                 alt="Profile Image"
                 className="h-20 w-20 rounded-full"
               />

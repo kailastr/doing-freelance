@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 
 //icons
 import { GoVerified } from "react-icons/go";
 import { GrMapLocation } from "react-icons/gr";
 import { AiTwotoneDollarCircle } from "react-icons/ai";
+import ApplyGigModal from "../Modal/ApplyGigModal";
+
 import { readContract, writeContract, getAccount } from "@wagmi/core";
 import { connectConfig } from "../../ConnectKit/Web3Provider";
 import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
 import supabase from "../../config/supabaseConfig";
 
 const GigCard = (props) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isApplied, setIsApplied] = useState(false);
+
+  const handleApplyGig = () => {
+    setIsLoading(true);
+    // Simulate loading delay
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsApplied(true);
+      setIsModalOpen(true);
+    }, 1000); // Adjust the loading duration as needed
+  };
+
   const freelancerApply = async () => {
     console.log("hii..");
     console.log("propsdat:", props.id);
@@ -34,6 +50,7 @@ const GigCard = (props) => {
       address: blanceAddress, // Assuming this is correctly defined
       functionName: "applyGig",
     });
+    handleApplyGig();
     await freelancerApply();
     console.log("Hii..");
 
@@ -75,16 +92,24 @@ const GigCard = (props) => {
       </div>
 
       <div className="flex flex-col justify-center my-5">
-        <button
-          onClick={() => applyGig()}
-          className="border-2 border-blue-600 py-2 px-5 mx-auto rounded-md hover:bg-blue-100"
-        >
-          Apply Gig
-        </button>
+        {" "}
+        {isApplied ? (
+          <button className="border-2 bg-slate-300 border-slate-600 py-2 px-5 mx-auto rounded-md hover:bg-slate-200 cursor-not-allowed">
+            Applied
+          </button>
+        ) : (
+          <button
+            className="border-2 border-blue-600 py-2 px-5 mx-auto rounded-md hover:bg-blue-100"
+            onClick={applyGig}
+          >
+            {isLoading ? "Loading..." : "Apply Gig"}
+          </button>
+        )}
         <p className="mx-auto my-2 text-red-400 text-sm">
           Apply to connect with client
         </p>
       </div>
+      <ApplyGigModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </div>
   );
 };
