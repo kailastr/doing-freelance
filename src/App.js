@@ -17,6 +17,8 @@ import ClientProfile from './pages/client/ClientProfile';
 import ClientGigRequest from './pages/client/ClientGigRequest';
 import ClientViewSubmittedGig from './pages/client/ClientViewSubmittedGig';
 
+import MediatorPage from './pages/MediatorPage';
+
 import { Web3Provider } from './ConnectKit/Web3Provider';
 
 function App() {
@@ -41,6 +43,8 @@ function App() {
               <Route path='gigrequest' element={<ClientGigRequest />} />
               <Route path='submittedgig' element={<ClientViewSubmittedGig />} />
             </Route>
+
+            <Route path='/mediator' element={<MediatorPage />} />
 
           </Routes>
         </Web3Provider>
