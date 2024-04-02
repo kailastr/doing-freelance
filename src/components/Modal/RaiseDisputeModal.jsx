@@ -53,10 +53,10 @@ const RaiseDisputeModal = ({ isOpen, setIsOpen, userId }) => {
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900 text-center"
                                     >
-                                        Raise Dispute
+                                        Dispute Successfully Raised
                                     </Dialog.Title>
 
-                                    <form onSubmit={escrowProjectSubmit}>
+                                    {/* <form onSubmit={escrowProjectSubmit}>
                                         <div className='flex flex-col'>
                                             <p className='text-lg font-semibold my-3 text-center'>{`User Id : ${userId}`}</p>
                                             <label htmlFor="projectUrl" className='text-lg w-5/12 font-semibold my-1'>Escrow id: </label>
@@ -72,7 +72,10 @@ const RaiseDisputeModal = ({ isOpen, setIsOpen, userId }) => {
                                                 <button type='submit' className='text-lg font-semibold border border-blue-600 w-full py-2 my-3 rounded-md bg-blue-100 hover:bg-blue-200'>Submit</button>
                                             </div>
                                         </div>
-                                    </form>
+                                    </form> */}
+                                    <div className='my-3'>
+                                        <button className='text-lg font-semibold border border-green-600 w-full py-2 my-3 rounded-md bg-green-100 hover:bg-green-200' onClick={closeModal}>OK</button>
+                                    </div>
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
