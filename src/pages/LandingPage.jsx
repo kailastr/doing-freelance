@@ -11,7 +11,7 @@ const LandingPage = () => {
         <>
             <div className=''>
 
-                <section className="relative z-10">
+                <section className="relative -z-10">
                     <div
                         className="bg-cover bg-center"
                         style={{ backgroundImage: `url(https://masterbundles.com/wp-content/uploads/2022/08/featured-image-how-easy-is-it-to-create-and-upload-a-product-to-masterbundles_-scaled.jpg)`, height: ' 70vh' }}

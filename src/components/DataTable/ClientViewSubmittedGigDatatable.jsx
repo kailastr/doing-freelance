@@ -160,6 +160,12 @@ const ClientViewSubmittedGigDatatable = () => {
             Project Link
           </div>
         </Link>
+        <div className=" my-2">
+          <p>
+            <span className=" font-semibold">Project Description : </span>
+            {data.description}
+          </p>
+        </div>
         <div className="text-semibold my-3">
           Transaction Status :{" "}
           <Tag value={data.appliedGigStatus} severity="info" />
@@ -172,12 +178,12 @@ const ClientViewSubmittedGigDatatable = () => {
             >
               Raise Dispute
             </button>
-            <button
+            {/* <button
               className="bg-blue-200 hover:bg-blue-300 border-2 border-blue-400 hover:border-blue-500 hover:shadow-md px-3 py-1 rounded-md"
               onClick={() => releaseFund(data)}
             >
               Release Fund
-            </button>
+            </button> */}
           </div>
         )}
       </div>
