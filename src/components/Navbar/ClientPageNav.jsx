@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const ClientPageNav = () => {
     return (
         <>
-            <div className='flex justify-between bg-red-500 text-white w-full py-6 px-20 sticky top-0'>
+            <div className='flex justify-between bg-red-600 text-white w-full py-6 px-20 sticky top-0 z-50'>
                 <div className='font-semibold font-serif text-xl py-2'>
                     Hey Client..
                 </div>
