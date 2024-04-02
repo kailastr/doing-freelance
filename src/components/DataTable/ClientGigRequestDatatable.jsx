@@ -47,16 +47,6 @@ const ClientGigRequestDatatable = () => {
       `
         );
       console.log("gigData", data);
-      /**supabase
-    .from("user_points")
-    .select("address, pending_points")
-    .eq("pending_points", MINIMUM_TRANSFER_SIZE); 
-    const { data, error } = await supabase
-      .from("user_points")
-      .select("*")
-      .eq("address", address)
-      .single();
-    */
 
       const processedData = data?.map((item) => ({
         project: item?.["DF-CreatedGig"]?.Title,
@@ -76,6 +66,8 @@ const ClientGigRequestDatatable = () => {
       console.log("fetchedEscrowId:", escrowId);
       const escrowAmount = data[gigDataIndex].escrow_amount;
       console.log("fetchedEscrowAmt:", escrowAmount);
+      const gigIdd = data[gigDataIndex].gig_id;
+      localStorage.setItem("rejectGigId", gigIdd);
 
       localStorage.setItem("freelancerEscrwId", escrowId);
       localStorage.setItem("freelancerEscrwAmt", escrowAmount);
@@ -109,11 +101,25 @@ const ClientGigRequestDatatable = () => {
       updateGigStatus(rowData, "Accepted");
     }
   };
-
-  const RejectGig = (rowData) => {
+  const rejectGigId = localStorage.getItem("rejectGigId");
+  console.log("rejectedGigId:", rejectGigId);
+  const RejectGig = async (rowData) => {
     const confirmation = window.confirm(
       "Are you sure you want to reject this gig request?"
     );
+    const { data, error } = await supabase
+      .from("DF-FreelancerAppliedGigs")
+      .update({
+        status: "Rejected",
+      })
+      .eq("gig_id", rejectGigId)
+      .select();
+    if (error) {
+      console.error("Error updating column:", error);
+    } else {
+      console.log("Enum column updated successfully:", data);
+    }
+    localStorage.removeItem("rejectGigId");
     if (confirmation) {
       setExpandedRows(null);
       updateGigStatus(rowData, "Rejected");
@@ -135,7 +141,7 @@ const ClientGigRequestDatatable = () => {
       address: blanceAddress,
       functionName: "escrowDeposited",
       args: [escrowId],
-      value: actualEscrwAmt,
+      value: parseEther(actualEscrwAmt.toString()),
     });
   };
   const depositEscrow = (rowData) => {

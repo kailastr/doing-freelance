@@ -94,7 +94,7 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
       } else {
         console.log("Enum column updated successfully:", data);
       }
-    }, 10000);
+    }, 12000);
   };
 
   var createdEscrowId;

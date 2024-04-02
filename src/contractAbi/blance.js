@@ -1,4 +1,4 @@
-export const blanceAddress = "0x05504e38de7e979d4bE80D92a29F863563F7A906"
+export const blanceAddress = "0x3c48B934D126B582c9e22080F6A8aAb4B46E68bc"
 
 
 export const blanceAbi = [
@@ -173,6 +173,25 @@ export const blanceAbi = [
       {
         "indexed": true,
         "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "_freelancer",
         "type": "address"
       }
@@ -333,6 +352,13 @@ export const blanceAbi = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "bytes32", "name": "escrowId", "type": "bytes32" }
     ],
@@ -350,6 +376,13 @@ export const blanceAbi = [
   },
   {
     "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "reputationScore",
     "outputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
     "stateMutability": "view",
@@ -361,7 +394,16 @@ export const blanceAbi = [
     ],
     "name": "resolveDispute",
     "outputs": [],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_mediator", "type": "address" }
+    ],
+    "name": "setMediator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -369,6 +411,15 @@ export const blanceAbi = [
       { "internalType": "bytes32", "name": "escrowId", "type": "bytes32" }
     ],
     "name": "submitFinishedGig",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

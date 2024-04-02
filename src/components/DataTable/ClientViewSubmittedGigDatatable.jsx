@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 //primereact
@@ -11,182 +11,78 @@ import "primereact/resources/primereact.min.css";
 
 //escrow modal component
 import RaiseDisputeModal from "../Modal/RaiseDisputeModal";
+import supabase from "../../config/supabaseConfig";
+import { writeContract } from "@wagmi/core";
+import { connectConfig } from "../../ConnectKit/Web3Provider";
+import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
 
 const ClientViewSubmittedGigDatatable = () => {
   const [isEscrowOpen, setIsEscrowOpen] = useState(false);
-
+  const [gigRequestData, setGigRequestData] = useState([]);
   const [escrowUserId, setEscrowUserId] = useState("");
+  const [fetchError, setFetchError] = useState(null);
 
-  const [gigRequestData, setGigRequestData] = useState([
-    {
-      project: "Web 3 project",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Static web",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 3,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Completed",
-    },
-    {
-      project: "Python Project",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 5,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Completed",
-    },
-    {
-      project: "Embedded Programmer",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Flutter app",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Completed",
-    },
-    {
-      project: "Blockchain Dev",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Web 3 project",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Static web",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Python Project",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Embedded Programmer",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Flutter app",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Blockchain Dev",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      projectUrl: "https://react.dev/",
-      appliedGigStatus: "Pending",
-    },
-  ]);
+  const fetchSubmittedGigs = async () => {
+    const { data, error } = await supabase
+      .from("DF-FreelancerAppliedGigs") // Replace 'users' with your table name
+      .select(
+        `
+     project_link,
+    escrow_id,
+    escrow_amount,
+    id,
+    gig_id,
+    status,
+    freelancer_email,
+    DF-FreelancerProfile (
+      *
+    ),
+    DF-CreatedGig (
+      *
+    )
+  `
+      )
+      .eq("status", "Submitted");
+    console.log("submittedGigData", data);
+
+    if (error) {
+      setFetchError("could not fetch the existing gigs");
+      console.log(error);
+    }
+    if (data) {
+      const processedData = data?.map((item) => ({
+        project: item?.["DF-CreatedGig"]?.Title,
+        name: item?.["DF-FreelancerProfile"]?.FirstName,
+        description: item?.["DF-CreatedGig"]?.Description,
+        badgeCoins: 650,
+        languagesKnown: item?.["DF-FreelancerProfile"]?.Languages,
+        skills: item?.["DF-FreelancerProfile"]?.Skills,
+        ExperienceLevel: item?.["DF-FreelancerProfile"]?.ExperienceLevel,
+        walletAddress: "233232",
+        rating: 4,
+        projectUrl: item?.project_link,
+        appliedGigStatus: item?.status,
+      }));
+      const gigDataIndex = data.length - 1;
+      console.log("gigDataIndex:", gigDataIndex);
+      const escrowId = data[gigDataIndex].escrow_id;
+      console.log("fetchedEscrowId:", escrowId);
+      const escrowAmount = data[gigDataIndex].escrow_amount;
+      console.log("fetchedEscrowAmt:", escrowAmount);
+      const gigIdd = data[gigDataIndex].gig_id;
+      localStorage.setItem("disputedGigId", gigIdd);
+
+      localStorage.setItem("freelancerEscroowId", escrowId);
+      localStorage.setItem("freelancerEscrwAmt", escrowAmount);
+      setGigRequestData(processedData);
+      // setGigdata(data);
+      setFetchError(null);
+      console.log(data);
+    }
+  };
+  useEffect(() => {
+    fetchSubmittedGigs();
+  }, []);
 
   const [expandedRows, setExpandedRows] = useState(null);
   const toast = useRef(null);
@@ -201,11 +97,43 @@ const ClientViewSubmittedGigDatatable = () => {
       updateGigStatus(rowData, "Completed");
     }
   };
+  const freelancerEscrwId = localStorage.getItem("freelancerEscroowId");
+  const disputedGigId = localStorage.getItem("disputedGigId");
+  console.log("disputeEscrwId:", freelancerEscrwId);
+  localStorage.removeItem("freelancerEscroowId");
+  localStorage.removeItem("disputedGigId");
+  console.log("type of escrwId:", typeof freelancerEscrwId);
+  console.log("type of gigId:", typeof disputedGigId);
+  console.log("disputedGigId:", disputedGigId);
 
+  const actualDisputedGigId = parseInt(disputedGigId, 10);
+  console.log("type of actual-disputedGigId:", typeof actualDisputedGigId);
+
+  const haveDispute = async () => {
+    await writeContract(connectConfig, {
+      abi: blanceAbi,
+      address: blanceAddress,
+      functionName: "haveDispute",
+      args: [freelancerEscrwId],
+    });
+    const { data, error } = await supabase
+      .from("DF-FreelancerAppliedGigs")
+      .update({
+        dispute_status: "OnDispute",
+      })
+      .eq("gig_id", actualDisputedGigId)
+      .select();
+    if (error) {
+      console.error("Error updating column:", error);
+    } else {
+      console.log("Enum column updated successfully:", data);
+    }
+  };
   const raiseDispute = (rowData) => {
     const confirmation = window.confirm(
-      "Are you sure you want to accept this gig request ?"
+      "Are you sure you want to raise dispute?"
     );
+    haveDispute();
     if (confirmation) {
       setIsEscrowOpen(true);
       setEscrowUserId(rowData.name);
@@ -213,8 +141,6 @@ const ClientViewSubmittedGigDatatable = () => {
       updateGigStatus(rowData, "Completed");
     }
   };
-
-
 
   const updateGigStatus = (rowData, status) => {
     const updatedData = gigRequestData.map((item) =>
@@ -238,7 +164,7 @@ const ClientViewSubmittedGigDatatable = () => {
           Transaction Status :{" "}
           <Tag value={data.appliedGigStatus} severity="info" />
         </div>
-        {data.appliedGigStatus === "Pending" && (
+        {data.appliedGigStatus === "Submitted" && (
           <div className="flex gap-3 mt-2">
             <button
               className="bg-red-200 hover:bg-red-300 border-2 border-red-400 hover:border-red-500 hover:shadow-md px-3 py-1 rounded-md"

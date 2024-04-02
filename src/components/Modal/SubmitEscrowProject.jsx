@@ -41,7 +41,6 @@ const SubmitEscrowProject = ({ isOpen, setIsOpen, userId }) => {
     fetchGigData();
   });
   const giigId = localStorage.getItem("freelancergigId");
-  localStorage.removeItem("freelancergigId");
   console.log("gigIdAfter:", giigId);
   console.log("type of gigId:", typeof giigId);
   const actualGigId = parseInt(giigId, 10);
@@ -51,14 +50,17 @@ const SubmitEscrowProject = ({ isOpen, setIsOpen, userId }) => {
     e.preventDefault();
     const { data, error } = await supabase
       .from("DF-FreelancerAppliedGigs")
-      .update({ status: "Submitted" })
+      .update({ status: "Submitted", project_link: projectUrl })
       .eq("gig_id", actualGigId)
       .select();
     if (error) {
       console.error("Error updating column:", error);
+      console.log("gigIdAfterUpdate:", giigId);
     } else {
       console.log("Enum column updated successfully:", data);
+      console.log("gigIdAfterUpdate:", giigId);
     }
+    localStorage.removeItem("freelancergigId");
     console.log(userId, projectUrl);
     closeModal();
     alert("Project successfully submitted");
