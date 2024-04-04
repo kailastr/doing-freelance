@@ -21,11 +21,12 @@ const AddNewGigCard = () => {
   const handleSubmit = async (e) => {
     const Email = localStorage.getItem("userEmail");
     e.preventDefault();
-    if (!title || !price || !location || !skills || !description || !date) {
-      setFormError("kindly fill all the field to create a gig");
-      return;
-    }
-    console.log("kooi");
+    // if (!title || !price || !location || !skills || !description || !date) {
+    //   setFormError("kindly fill all the field to create a gig");
+    //   return;
+    // }
+    // console.log("kooi");
+    alert("Successfully created new Gig.");
     const { data, error } = await supabase
       .from("DF-CreatedGig")
       .insert([
@@ -49,6 +50,8 @@ const AddNewGigCard = () => {
       console.log(data);
       setFormError(null);
     }
+
+    e.target.reset();
   };
 
   const formSubmit = (e) => {
@@ -90,6 +93,7 @@ const AddNewGigCard = () => {
               Project Title (Keep It Short)
             </label>
             <input
+              required
               type="text"
               id="projectTitle"
               name="projectTitle"
@@ -106,6 +110,7 @@ const AddNewGigCard = () => {
               Project Description
             </label>
             <input
+              required
               type="text"
               id="projectDescription"
               name="projectDescription"
@@ -120,6 +125,7 @@ const AddNewGigCard = () => {
                 Price{" "}
               </label>
               <input
+                required
                 type="text"
                 id="price"
                 name="price"
@@ -136,6 +142,7 @@ const AddNewGigCard = () => {
                 Add Your location{" "}
               </label>
               <input
+                required
                 type="text"
                 id="location"
                 name="location"
@@ -152,6 +159,7 @@ const AddNewGigCard = () => {
                 Add Deadline of your project{" "}
               </label>
               <input
+                required
                 type="date"
                 id="deadline"
                 name="deadline"
@@ -168,6 +176,7 @@ const AddNewGigCard = () => {
               Required Skills{" "}
             </label>
             <input
+              required
               type="text"
               id="skills"
               name="skills"
