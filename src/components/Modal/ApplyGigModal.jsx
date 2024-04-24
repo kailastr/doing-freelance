@@ -1,10 +1,9 @@
-import React, { useState, Fragment } from 'react';
+import React, { Fragment } from 'react';
 
 //headless ui modal
 import { Dialog, Transition } from '@headlessui/react';
 
-const RaiseDisputeModal = ({ isOpen, setIsOpen, userId }) => {
-    const [escrowId, setEscrowId] = useState('');
+const ApplyGigModal = ({ isOpen, setIsOpen }) => {
 
     function closeModal() {
         setIsOpen(false)
@@ -12,13 +11,6 @@ const RaiseDisputeModal = ({ isOpen, setIsOpen, userId }) => {
 
     function openModal() {
         setIsOpen(true)
-    }
-
-    const escrowProjectSubmit = (e) => {
-        e.preventDefault();
-        console.log(userId, escrowId);
-        closeModal();
-        alert("Project successfully submitted");
     }
 
     return (
@@ -53,28 +45,16 @@ const RaiseDisputeModal = ({ isOpen, setIsOpen, userId }) => {
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900 text-center"
                                     >
-                                        Dispute Successfully Raised
+                                        Application Status
                                     </Dialog.Title>
 
-                                    {/* <form onSubmit={escrowProjectSubmit}>
-                                        <div className='flex flex-col'>
-                                            <p className='text-lg font-semibold my-3 text-center'>{`User Id : ${userId}`}</p>
-                                            <label htmlFor="projectUrl" className='text-lg w-5/12 font-semibold my-1'>Escrow id: </label>
-                                            <input
-                                                type="text"
-                                                name="projectUrl"
-                                                id="projectUrl"
-                                                className='border border-blue-600 rounded-md px-2 py-1 my-3'
-                                                placeholder='Enter your escrow id'
-                                                onChange={(e) => setEscrowId(e.target.value)}
-                                            />
-                                            <div className='my-3'>
-                                                <button type='submit' className='text-lg font-semibold border border-blue-600 w-full py-2 my-3 rounded-md bg-blue-100 hover:bg-blue-200'>Submit</button>
-                                            </div>
-                                        </div>
-                                    </form> */}
-                                    <div className='my-3'>
-                                        <button className='text-lg font-semibold border border-green-600 w-full py-2 my-3 rounded-md bg-green-100 hover:bg-green-200' onClick={closeModal}>OK</button>
+                                    <div className='flex items-center justify-center my-3'>
+                                        <h2>
+                                            Application Request Successfully Sent
+                                        </h2>
+                                    </div>
+                                    <div className='flex items-center justify-center my-5'>
+                                        <button className='bg-blue-200 px-5 py-2 rounded-md hover:bg-blue-300' onClick={closeModal}>OK</button>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>
@@ -86,4 +66,4 @@ const RaiseDisputeModal = ({ isOpen, setIsOpen, userId }) => {
     )
 }
 
-export default RaiseDisputeModal
+export default ApplyGigModal
