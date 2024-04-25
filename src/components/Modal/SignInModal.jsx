@@ -10,21 +10,54 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const [invalidCredentials, setInvalidCredentials] = useState(false);
+
   const navigation = useNavigate();
+
   function closeModal() {
     setIsOpen(false);
+    setInvalidCredentials(false);
   }
 
   function openModal() {
     setIsOpen(true);
   }
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     // debugger;
+  //     const {
+  //       data: { user },
+  //     } = await supabase.auth.signInWithPassword({
+  //       email,
+  //       password,
+  //     });
+
+  //     if (error) {
+  //       setError(error.message);
+  //     } else {
+  //       // Sign-in successful, you can perform additional operations here
+  //       console.log("Sign-in successful:", user);
+  //       navigation("/client");
+  //       localStorage.setItem("userEmail", `${email}`);
+  //       // Optionally, you can navigate to a different page or show a success message
+  //     }
+  //   } catch (e) {
+  //     console.error("Sign-in error:", error);
+  //     setError(error.message);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       // debugger;
       const {
-        data: { user },
+        data: userData, error
       } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -32,18 +65,55 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
 
       if (error) {
         setError(error.message);
+        setInvalidCredentials(true);
+        return; // Exit early if there's an error
+      }
+
+      if (!userData) {
+        setError("User data not found.");
+        return; // Exit early if user data is null
+      }
+      // await supabase.from("DF-UserProfile").select("*").eq("mailId", email);
+
+      const { data, error: userProfileError } = await supabase
+        .from("DF-UserProfile")
+        .select("*")
+        .eq("mailId", email)
+        .single();
+
+      if (userProfileError) {
+        setError(userProfileError.message);
+        return; // Exit early if there's an error fetching user profile
+      }
+
+      if (!data) {
+        setError("User profile not found.");
+        return; // Exit early if user profile data is null
+      }
+
+      const realPass = data.password;
+
+      if (password !== realPass) {
+        // setError(error.message);
+        setInvalidCredentials(true);
+        return;
       } else {
         // Sign-in successful, you can perform additional operations here
-        console.log("Sign-in successful:", user);
+        console.log("Sign-in successful:", userData);
+        console.log("login-data:", data);
+        console.log("password:", data.password);
+        closeModal();
         navigation("/client");
         localStorage.setItem("userEmail", `${email}`);
         // Optionally, you can navigate to a different page or show a success message
       }
-    } catch (e) {
+    } catch (error) {
       console.error("Sign-in error:", error);
       setError(error.message);
     }
   };
+
+
   return (
     <div>
       <Transition appear show={isOpen} as={Fragment}>
@@ -79,7 +149,7 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
                                         Sign In to doingFreelance
                                     </Dialog.Title> */}
 
-                  <form onSubmit={handleSubmit} action="">
+                  <form>
                     <div className="flex flex-col">
                       <label
                         htmlFor="userName"
@@ -109,14 +179,17 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
                         placeholder="************"
                         onChange={(e) => setPassword(e.target.value)}
                       />
+                      <p className="my-2 text-red-600 text-center" id="ifInvalidCredentials">
+                        {invalidCredentials && "Invalid Credentials"}
+                      </p>
                       <div className="mt-4">
-                        <button
-                          type="submit"
+                        <div
+                          onClick={handleSubmit}
                           className="w-full inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                          onClick={closeModal}
+                        // onClick={closeModal}
                         >
                           Sign In
-                        </button>
+                        </div>
                       </div>
                     </div>
                   </form>

@@ -94,7 +94,7 @@ const LandingPage = () => {
                 </section>
 
                 <hr />
-                <p className='py-5'>Join our platform today to connect with top freelancers or find your next gig opportunity!</p>
+                <p className='py-5 text-center'>Join our platform today to connect with top freelancers or find your next gig opportunity!</p>
             </div>
         </>
     )
