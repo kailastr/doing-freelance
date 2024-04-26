@@ -10,8 +10,8 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
   const [invalidCredentials, setInvalidCredentials] = useState(false);
+  const [containsUppercase, setContainsUppercase] = useState(false);
 
   const navigation = useNavigate();
 
@@ -53,6 +53,11 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (containsUppercase) {
+      // If email contains uppercase letters, don't proceed with sign-in
+      return;
+    }
 
     try {
       // debugger;
@@ -113,6 +118,17 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
     }
   };
 
+  const handleEmailChange = (e) => {
+    const enteredEmail = e.target.value;
+    setEmail(enteredEmail);
+
+    // Check if email contains uppercase letters
+    if (/[A-Z]/.test(enteredEmail)) {
+      setContainsUppercase(true);
+    } else {
+      setContainsUppercase(false);
+    }
+  };
 
   return (
     <div>
@@ -142,12 +158,6 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  {/* <Dialog.Title
-                                        as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900"
-                                    >
-                                        Sign In to doingFreelance
-                                    </Dialog.Title> */}
 
                   <form>
                     <div className="flex flex-col">
@@ -163,8 +173,13 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
                         name="userName"
                         className="mt-2 py-1 px-1 border-2 border-blue-400 rounded-md focus:outline-none focus:border-blue-700"
                         placeholder="Enter your email as username"
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={handleEmailChange}
                       />
+                      {containsUppercase && (
+                        <p className="text-red-600 text-sm">
+                          Email should be all lowercase.
+                        </p>
+                      )}
                       <label
                         htmlFor="userPassword"
                         className="text-lg font-semibold mt-3"
