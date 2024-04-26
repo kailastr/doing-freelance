@@ -29,8 +29,17 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
         email,
         password,
       });
+      // await supabase.from("DF-UserProfile").select("*").eq("mailId", email);
+      const { data, error } = await supabase
+        .from("DF-UserProfile")
+        .select("*")
+        .eq("mailId", email)
+        .single();
+      console.log("login-data:", data);
+      console.log("password:", data.password);
+      const realPass = data.password;
 
-      if (error) {
+      if (password !== realPass) {
         setError(error.message);
       } else {
         // Sign-in successful, you can perform additional operations here
