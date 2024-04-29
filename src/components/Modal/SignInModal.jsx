@@ -61,32 +61,30 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
 
     try {
       // debugger;
-      const {
-        data: userData, error
-      } = await supabase.auth.signInWithPassword({
+      const { data: userData, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       // await supabase.from("DF-UserProfile").select("*").eq("mailId", email);
-      const { data, error } = await supabase
-        .from("DF-UserProfile")
-        .select("*")
-        .eq("mailId", email)
-        .single();
-      console.log("login-data:", data);
-      console.log("password:", data.password);
-      const realPass = data.password;
+      // const { data, error } = await supabase
+      //   .from("DF-UserProfile")
+      //   .select("*")
+      //   .eq("mailId", email)
+      //   .single();
+      // console.log("login-data:", data);
+      // console.log("password:", data.password);
+      // const realPass = data.password;
 
-      if (password !== realPass) {
-        setError(error.message);
-        setInvalidCredentials(true);
-        return; // Exit early if there's an error
-      }
+      // if (password !== realPass) {
+      //   setError(error.message);
+      //   setInvalidCredentials(true);
+      //   return; // Exit early if there's an error
+      // }
 
-      if (!userData) {
-        setError("User data not found.");
-        return; // Exit early if user data is null
-      }
+      // if (!userData) {
+      //   setError("User data not found.");
+      //   return; // Exit early if user data is null
+      // }
       // await supabase.from("DF-UserProfile").select("*").eq("mailId", email);
 
       const { data, error: userProfileError } = await supabase
@@ -116,9 +114,15 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
         console.log("Sign-in successful:", userData);
         console.log("login-data:", data);
         console.log("password:", data.password);
-        closeModal();
-        navigation("/client");
-        localStorage.setItem("userEmail", `${email}`);
+        if (data.userType === "client") {
+          closeModal();
+          navigation("/client");
+          localStorage.setItem("userEmail", `${email}`);
+        } else {
+          closeModal();
+          navigation("/freelancer");
+          localStorage.setItem("userEmail", `${email}`);
+        }
         // Optionally, you can navigate to a different page or show a success message
       }
     } catch (error) {
@@ -167,7 +171,6 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-
                   <form>
                     <div className="flex flex-col">
                       <label
@@ -203,14 +206,17 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
                         placeholder="************"
                         onChange={(e) => setPassword(e.target.value)}
                       />
-                      <p className="my-2 text-red-600 text-center" id="ifInvalidCredentials">
+                      <p
+                        className="my-2 text-red-600 text-center"
+                        id="ifInvalidCredentials"
+                      >
                         {invalidCredentials && "Invalid Credentials"}
                       </p>
                       <div className="mt-4">
                         <div
                           onClick={handleSubmit}
                           className="w-full inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                        // onClick={closeModal}
+                          // onClick={closeModal}
                         >
                           Sign In
                         </div>
