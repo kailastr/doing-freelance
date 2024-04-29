@@ -48,7 +48,7 @@ const FreelancerProfile = () => {
           console.log("mail:", Email);
           console.log("userBio:", fetchBio[0].userBio);
           console.log("fetchBio:", fetchBio);
-          setUserData(fetchBio);
+          setUserData(data);
         }
       } catch (error) {
         console.error(error);
@@ -103,7 +103,7 @@ const FreelancerProfile = () => {
     }
   };
   const [user, setUser] = useState({
-    FirstName: "Allen",
+    fullName: "Allen",
     description:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
     badgeCoins: 650,
@@ -173,7 +173,11 @@ const FreelancerProfile = () => {
     <>
       <div id="profileView">
         <div className="w-full flex justify-center mt-10">
-          <h1 className="text-xl font-semibold">{`Hey ${userData[0].fullName}, Welcome to DoingFreelance`}</h1>
+          <h1 className="text-xl font-semibold">{`Hey ${
+            fetchBio?.[0]?.fullName || "Loading..."
+          } Welcome to DoingFreelance`}</h1>
+          {/* {userData.length > 0 && (
+          )} */}
         </div>
 
         {/* profile inpage navigation */}
@@ -219,7 +223,12 @@ const FreelancerProfile = () => {
                 alt="Profile Icon"
                 className="w-36 h-36 mx-auto my-3 rounded-full"
               />
-              <h3 className="mx-auto font-medium text-md">{`Name : ${userData[0].fullName} `}</h3>
+              {/* Check if userData is not empty before accessing its properties */}
+              <h3 className="mx-auto font-medium text-md">{`Name : ${
+                fetchBio?.[0]?.fullName || "Loading..."
+              } `}</h3>
+              {/* {userData.length > 0 && (
+              )} */}
               {console.log("userData:", userData)}
               <div className="flex justify-center gap-2">
                 <IoIosInformationCircleOutline
@@ -238,6 +247,7 @@ const FreelancerProfile = () => {
               <div>
                 <h3 className="text-lg font-semibold">About me : </h3>
                 <p>{fetchBio?.[0]?.userBio || "Loading..."}</p>
+                {console.log("fetchBio:", fetchBio[0])}
               </div>
               <div className="flex gap-10 my-3 font-semibold">
                 <div className="flex gap-2">
