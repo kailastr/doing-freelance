@@ -1,8 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ethers } from "ethers";
-import { utils } from "ethers";
-import { formatBytes32String } from "ethers";
 
 //primereact
 import { DataTable } from "primereact/datatable";
@@ -101,10 +98,10 @@ const ClientViewSubmittedGigDatatable = () => {
     }
   };
   const freelancerEscrwId = localStorage.getItem("freelancerEscroowId");
-  const bytes32FreelancerEscrwId =
-    ethers.formatBytes32String(freelancerEscrwId);
+  // const bytes32FreelancerEscrwId =
+  //   ethers.formatBytes32String(freelancerEscrwId);
 
-  console.log("bytes32-escrowId", bytes32FreelancerEscrwId);
+  // console.log("bytes32-escrowId", bytes32FreelancerEscrwId);
 
   const disputedGigId = localStorage.getItem("disputedGigId");
   console.log("disputeEscrwId:", freelancerEscrwId);
@@ -122,7 +119,7 @@ const ClientViewSubmittedGigDatatable = () => {
       abi: blanceAbi,
       address: blanceAddress,
       functionName: "haveDispute",
-      args: [bytes32FreelancerEscrwId],
+      args: [freelancerEscrwId],
     });
     const { data, error } = await supabase
       .from("DF-FreelancerAppliedGigs")
