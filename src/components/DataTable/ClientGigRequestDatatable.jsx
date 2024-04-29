@@ -10,6 +10,10 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 
 import supabase from "../../config/supabaseConfig";
+import { writeContract } from "@wagmi/core";
+import { parseEther } from "viem";
+import { connectConfig } from "../../ConnectKit/Web3Provider";
+import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
 
 //escrow modal component
 import CreateEscrow from "../Modal/CreateEscrowModal";
@@ -17,7 +21,7 @@ import CreateEscrow from "../Modal/CreateEscrowModal";
 const ClientGigRequestDatatable = () => {
   const Email = localStorage.getItem("userEmail");
   const [isEscrowOpen, setIsEscrowOpen] = useState(false);
-
+  const [gigRequestData, setGigRequestData] = useState([]);
   const [escrowUserId, setEscrowUserId] = useState("");
   const [fetchError, setFetchError] = useState(null);
   const [gigData, setGigdata] = useState([]);
@@ -25,11 +29,50 @@ const ClientGigRequestDatatable = () => {
     const fetchGigs = async () => {
       //   const { data, error } = await supabase.from("DF-CreatedGig").select();
       const { data, error } = await supabase
-        .from("users") // Replace 'users' with your table name
-        .select("*") // Select the columns you want to fetch
-        .eq("Email", Email) // Filter by the user ID
-        .single();
+        .from("DF-FreelancerAppliedGigs") // Replace 'users' with your table name
+        .select(
+          `
+        escrow_id,
+        escrow_amount,
+        id,
+        gig_id,
+        status,
+        freelancer_email,
+        DF-FreelancerProfile (
+          *
+        ),
+        DF-CreatedGig (
+          *
+        )
+      `
+        );
+      console.log("gigData", data);
 
+      const processedData = data?.map((item) => ({
+        project: item?.["DF-CreatedGig"]?.Title,
+        name: item?.["DF-FreelancerProfile"]?.FirstName,
+        description: item?.["DF-CreatedGig"]?.Description,
+        badgeCoins: 650,
+        languagesKnown: item?.["DF-FreelancerProfile"]?.Languages,
+        skills: item?.["DF-FreelancerProfile"]?.Skills,
+        ExperienceLevel: item?.["DF-FreelancerProfile"]?.ExperienceLevel,
+        walletAddress: "233232",
+        rating: 4,
+        appliedGigStatus: item?.status,
+      }));
+      const gigDataIndex = data.length - 1;
+      console.log("gigDataIndex:", gigDataIndex);
+      const escrowId = data[gigDataIndex].escrow_id;
+      console.log("fetchedEscrowId:", escrowId);
+      const escrowAmount = data[gigDataIndex].escrow_amount;
+      console.log("fetchedEscrowAmt:", escrowAmount);
+      const gigIdd = data[gigDataIndex].gig_id;
+      localStorage.setItem("rejectGigId", gigIdd);
+
+      localStorage.setItem("freelancerEscrwId", escrowId);
+      localStorage.setItem("freelancerEscrwAmt", escrowAmount);
+
+      setGigRequestData(processedData);
       if (error) {
         setFetchError("could not fetch the existing gigs");
         console.log(error);
@@ -40,168 +83,9 @@ const ClientGigRequestDatatable = () => {
         console.log(data);
       }
     };
-    debugger;
+    // debugger;
     fetchGigs();
   }, []);
-
-  const [gigRequestData, setGigRequestData] = useState([
-    {
-      project: "Web 3 project",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Static web",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 3,
-      appliedGigStatus: "Accepted",
-    },
-    {
-      project: "Python Project",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 5,
-      appliedGigStatus: "Rejected",
-    },
-    {
-      project: "Embedded Programmer",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Flutter app",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Completed",
-    },
-    {
-      project: "Blockchain Dev",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Web 3 project",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Static web",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Python Project",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Embedded Programmer",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Flutter app",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Pending",
-    },
-    {
-      project: "Blockchain Dev",
-      name: "Allen",
-      description:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore architecto culpa ab, expedita alias dolores tenetur perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa quibusdam nemo itaque eveniet neque reprehenderit.",
-      badgeCoins: 650,
-      languagesKnown: ["English", "Malayalam", "Hindi"],
-      skills: ["Web Development", "PhotoGraphy", "Photoshop"],
-      ExperienceLevel: "Expert",
-      walletAddress: "369#2255",
-      rating: 4,
-      appliedGigStatus: "Pending",
-    },
-  ]);
 
   const [expandedRows, setExpandedRows] = useState(null);
   const toast = useRef(null);
@@ -217,18 +101,51 @@ const ClientGigRequestDatatable = () => {
       updateGigStatus(rowData, "Accepted");
     }
   };
-
-  const RejectGig = (rowData) => {
+  const rejectGigId = localStorage.getItem("rejectGigId");
+  console.log("rejectedGigId:", rejectGigId);
+  const RejectGig = async (rowData) => {
     const confirmation = window.confirm(
       "Are you sure you want to reject this gig request?"
     );
+    const { data, error } = await supabase
+      .from("DF-FreelancerAppliedGigs")
+      .update({
+        status: "Rejected",
+      })
+      .eq("gig_id", rejectGigId)
+      .select();
+    if (error) {
+      console.error("Error updating column:", error);
+    } else {
+      console.log("Enum column updated successfully:", data);
+    }
+    localStorage.removeItem("rejectGigId");
     if (confirmation) {
       setExpandedRows(null);
       updateGigStatus(rowData, "Rejected");
     }
   };
 
-  const deposieEscrow = (rowData) => {
+  const escrowDeposit = async () => {
+    const escrowId = localStorage.getItem("freelancerEscrwId");
+    const escrowAmount = localStorage.getItem("freelancerEscrwAmt");
+    localStorage.removeItem("freelancerEscrwId");
+    localStorage.removeItem("freelancerEscrwAmt");
+    console.log("escrowAmt type:", typeof escrowAmount);
+    const actualEscrwAmt = parseInt(escrowAmount, 10);
+    console.log("actual-escrwAmt:", actualEscrwAmt);
+    console.log("actual-escrowAmt type:", typeof actualEscrwAmt);
+
+    const escrowTx = await writeContract(connectConfig, {
+      abi: blanceAbi,
+      address: blanceAddress,
+      functionName: "escrowDeposited",
+      args: [escrowId],
+      value: parseEther(actualEscrwAmt.toString()),
+    });
+  };
+  const depositEscrow = (rowData) => {
+    escrowDeposit();
     alert("Escrow Amount Deposited");
     setExpandedRows(null);
     updateGigStatus(rowData, "Completed");
@@ -291,9 +208,9 @@ const ClientGigRequestDatatable = () => {
 
             <button
               className="bg-blue-300 hover:bg-blue-400 border-2 hover:border-blue-500 hover:shadow-md px-3 py-1 rounded-md"
-              onClick={() => deposieEscrow(data)}
+              onClick={() => depositEscrow(data)}
             >
-              Deposite Escrow
+              Deposit Escrow
             </button>
           </div>
         )}
