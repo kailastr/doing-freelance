@@ -151,7 +151,7 @@ const ClientProfile = () => {
                 alt="Profile Icon"
                 className="w-36 h-36 mx-auto my-3 rounded-full"
               />
-              <h3 className="mx-auto font-medium text-md">{`Name : ${user.FirstName} ${user.MiddleName} ${user.LastName}`}</h3>
+              <h3 className="mx-auto font-medium text-md">{`Name : ${user.FirstName}`}</h3>
               <div className="flex justify-center gap-2">
                 <IoIosInformationCircleOutline
                   className="my-auto text-xl"
