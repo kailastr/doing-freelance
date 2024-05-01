@@ -152,17 +152,7 @@ const ClientProfile = () => {
                 className="w-36 h-36 mx-auto my-3 rounded-full"
               />
               <h3 className="mx-auto font-medium text-md">{`Name : ${user.FirstName} ${user.MiddleName} ${user.LastName}`}</h3>
-              <div className="flex justify-center gap-2">
-                <IoIosInformationCircleOutline
-                  className="my-auto text-xl"
-                  title="Coins 500 : Intermediate level, 500+ : Expert, 500- : bad rating"
-                />
-                <LuBadgeCheck className="my-auto bg-blue-400 rounded-full text-xl" />
-                <h3 className="font-normal text-md ">
-                  {" "}
-                  Badge Coins : {user.badgeCoins}{" "}
-                </h3>
-              </div>
+
             </div>
 
             <div className="w-8/12 flex flex-col my-5 px-10">
@@ -198,34 +188,13 @@ const ClientProfile = () => {
               <div className="flex gap-10  my-3">
                 <div className="flex gap-3">
                   <MdWorkOutline className="my-auto text-lg" />
-                  <h3 className="font-semibold">Works Committed</h3>
-                  <p>2</p>
+                  <h3 className="font-semibold">Works Posted</h3>
+                  <p>3</p>
                 </div>
-                <div className="flex gap-3">
-                  <FaRegStar className="my-auto text-lg" />
-                  <h3 className="font-semibold">Rating</h3>
-                  <p>4/5</p>
-                </div>
-              </div>
-              <div className="flex gap-3 my-3">
-                <GrSemantics className="my-auto text-lg" />
-                <h3 className="font-semibold">Experience Level : </h3>
-                <p className="font-semibold">{user.ExperienceLevel}</p>
               </div>
               <div className="flex gap-5 my-3">
                 <h3 className="font-semibold">Languages : </h3>
                 {user.languagesKnown.map((item, index) => (
-                  <p
-                    key={index}
-                    className="text-sm my-auto px-2 rounded-lg bg-red-50"
-                  >
-                    {item}
-                  </p>
-                ))}
-              </div>
-              <div className="flex gap-5 my-3">
-                <h3 className="font-semibold">Skills : </h3>
-                {user.skills.map((item, index) => (
                   <p
                     key={index}
                     className="text-sm my-auto px-2 rounded-lg bg-red-50"
@@ -304,25 +273,6 @@ const ClientProfile = () => {
                 className="flex justify-start mx-5 mt-3 font-medium w-11/12 px-3 rounded-md py-2"
               />
 
-              <div className="mt-3">
-                <label
-                  htmlFor="experienceLevel"
-                  className="flex justify-start mx-5 mt-3 font-medium"
-                >
-                  Experience Level :{" "}
-                </label>
-                <select
-                  id="experienceLevel"
-                  className="flex justify-start mx-5 mt-3 font-medium w-11/12 px-3 rounded-md py-2"
-                  value={experienceLevel}
-                  onChange={handleExperienceLevelChange}
-                >
-                  <option value="Beginner">Beginner</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Expert">Expert</option>
-                </select>
-              </div>
-
               <label
                 htmlFor="portfolioLink"
                 className="flex justify-start mx-5 mt-3 font-medium"
@@ -364,40 +314,6 @@ const ClientProfile = () => {
                       <IoMdClose
                         className="my-auto ml-2 cursor-pointer"
                         onClick={() => removeLanguage(index)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-3">
-                <h3 className="font-medium mx-5">Skills</h3>
-                <div className="flex gap-2 mx-5 mt-3">
-                  <input
-                    type="text"
-                    id="newskill"
-                    placeholder="Add new skill"
-                    className="flex justify-start font-medium w-8/12 px-3 rounded-md py-2"
-                  />
-                  <button
-                    className="mx-5 font-medium bg-slate-300 px-5 rounded-md"
-                    onClick={() =>
-                      addSkill(document.getElementById("newskill").value)
-                    }
-                  >
-                    Add
-                  </button>
-                </div>
-                <div className="flex gap-3 mx-5 mt-3">
-                  {user.skills.map((skill, index) => (
-                    <div
-                      className="bg-red-50 px-2 py-1 text-xs rounded-xl flex my-auto"
-                      key={index}
-                    >
-                      {skill}
-                      <IoMdClose
-                        className="my-auto ml-2 cursor-pointer"
-                        onClick={() => removeSkill(index)}
                       />
                     </div>
                   ))}
