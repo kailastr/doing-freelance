@@ -1,6 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { watchContractEvent } from "@wagmi/core";
 
+// success Modal
+import EscrowSuccessModal from "./EscrowSuccessModal";
+
 //headless ui modal
 import { Dialog, Transition } from "@headlessui/react";
 import { writeContract, getAccount } from "@wagmi/core";
@@ -10,6 +13,8 @@ import supabase from "../../config/supabaseConfig";
 
 const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
   const [expandModal, setExpandModal] = useState(false);
+
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const [freelancerAddr, setFreelancerAddr] = useState("");
   const [escrowDeadline, setEscrowDeadline] = useState("");
@@ -108,9 +113,10 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
     console.log("escrowDeadline:", escrowDeadline);
     console.log("escrowAmt:", escrowAmount);
     console.log("freelancerAddr:", freelancerAddr);
+    setIsSuccessModalOpen(true);
 
     await watchEvent();
-    setTimeout(async () => {}, 5000);
+    setTimeout(async () => { }, 5000);
   };
 
   const account = getAccount(connectConfig);
@@ -124,6 +130,7 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
 
   return (
     <div>
+      <EscrowSuccessModal isOpen={isSuccessModalOpen} setIsOpen={setIsSuccessModalOpen} />
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child

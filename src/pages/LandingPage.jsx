@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 //layout
 import LandingPageLayout from '../layouts/LandingPageLayout';
+
+import EscrowSuccessModal from '../components/Modal/EscrowSuccessModal';
 
 //image
 import Image1 from '../components/images/img.jpg'
 
 const LandingPage = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     return (
         <>
             <div className=''>
+                <EscrowSuccessModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
 
                 <section className="relative -z-10">
                     <div
@@ -23,6 +27,8 @@ const LandingPage = () => {
                         </div>
                     </div>
                 </section>
+
+                {/* <button onClick={() => setIsModalOpen(true)}>Escrow success</button> */}
 
                 <section className=' py-10' id='home'>
 
