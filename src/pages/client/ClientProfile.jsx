@@ -53,7 +53,6 @@ const ClientProfile = () => {
     languagesKnown: ["English", "Malayalam", "Hindi"],
     skills: ["Web Development", "PhotoGraphy", "Photoshop"],
     ExperienceLevel: "Expert",
-    PortfolioLink: "",
     walletAddress: "369#2255",
   });
 
@@ -100,7 +99,6 @@ const ClientProfile = () => {
       MiddleName: document.getElementById("middleName").value,
       LastName: document.getElementById("lastName").value,
       ExperienceLevel: document.getElementById("experienceLevel").value,
-      PortfolioLink: document.getElementById("portfolioLink").value,
       walletAddress: document.getElementById("walletAddress").value,
     }));
   };
@@ -169,16 +167,6 @@ const ClientProfile = () => {
                 <div className="flex gap-2">
                   <GrLocation className="h-5 w-5 my-auto" />
                   <p>India-Kerala-Kochi</p>
-                </div>
-                <div className="cursor-pointer hover:text-red-500">
-                  <a
-                    href={`${user.PortfolioLink}`}
-                    target="_blank"
-                    className="flex gap-2 "
-                  >
-                    <IoIosLink className="h-5 w-5 my-auto" />
-                    <p>Portfolio Link</p>
-                  </a>
                 </div>
                 <div className="flex gap-2">
                   <IoWalletOutline className="h-5 w-5 my-auto" />
@@ -270,19 +258,6 @@ const ClientProfile = () => {
                 type="text"
                 id="walletAddress"
                 placeholder={user.walletAddress}
-                className="flex justify-start mx-5 mt-3 font-medium w-11/12 px-3 rounded-md py-2"
-              />
-
-              <label
-                htmlFor="portfolioLink"
-                className="flex justify-start mx-5 mt-3 font-medium"
-              >
-                Portfolio Link :{" "}
-              </label>
-              <input
-                type="text"
-                id="portfolioLink"
-                placeholder="https://...."
                 className="flex justify-start mx-5 mt-3 font-medium w-11/12 px-3 rounded-md py-2"
               />
 
