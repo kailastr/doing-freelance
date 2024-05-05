@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { ethers } from "ethers";
 
 //primereact
 import { DataTable } from "primereact/datatable";
@@ -62,6 +63,7 @@ const ClientViewSubmittedGigDatatable = () => {
         rating: 4,
         projectUrl: item?.project_link,
         appliedGigStatus: item?.status,
+        ...item,
       }));
       const gigDataIndex = data.length - 1;
       console.log("gigDataIndex:", gigDataIndex);
@@ -99,7 +101,7 @@ const ClientViewSubmittedGigDatatable = () => {
   };
   const freelancerEscrwId = localStorage.getItem("freelancerEscroowId");
   // const bytes32FreelancerEscrwId =
-  //   ethers.formatBytes32String(freelancerEscrwId);
+  //   ethers.utils.formatBytes32String(freelancerEscrwId);
 
   // console.log("bytes32-escrowId", bytes32FreelancerEscrwId);
 
@@ -114,12 +116,13 @@ const ClientViewSubmittedGigDatatable = () => {
   const actualDisputedGigId = parseInt(disputedGigId, 10);
   console.log("type of actual-disputedGigId:", typeof actualDisputedGigId);
 
-  const haveDispute = async () => {
+  const haveDispute = async (rowData) => {
+    console.log("rowData", rowData);
     await writeContract(connectConfig, {
       abi: blanceAbi,
       address: blanceAddress,
       functionName: "haveDispute",
-      args: [freelancerEscrwId],
+      args: [rowData.escrow_id],
     });
     const { data, error } = await supabase
       .from("DF-FreelancerAppliedGigs")
@@ -138,7 +141,7 @@ const ClientViewSubmittedGigDatatable = () => {
     const confirmation = window.confirm(
       "Are you sure you want to raise dispute?"
     );
-    haveDispute();
+    haveDispute(rowData);
     if (confirmation) {
       setIsEscrowOpen(true);
       setEscrowUserId(rowData.name);

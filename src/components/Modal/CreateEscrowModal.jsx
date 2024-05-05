@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { watchContractEvent } from "@wagmi/core";
+import EscrowSuccessModal from "./EscrowSuccessModal";
 
 //headless ui modal
 import { Dialog, Transition } from "@headlessui/react";
@@ -11,12 +12,15 @@ import supabase from "../../config/supabaseConfig";
 const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
   const [expandModal, setExpandModal] = useState(false);
 
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
   const [freelancerAddr, setFreelancerAddr] = useState("");
   const [escrowDeadline, setEscrowDeadline] = useState("");
   const [escrowAmount, setEscrowAmount] = useState("");
   const [depositEscrowId, setDeopiteEscrowId] = useState("");
 
   const numSeconds = 86400;
+  var createdEscrowId;
 
   const fetchGigId = async () => {
     const { data, error } = await supabase
@@ -61,8 +65,12 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
         if (logs.length > 0) {
           const escrowId = logs[0].args._escrowId;
           const escrowAmount = logs[0].args._escrowAmt;
+          console.log("typeOf EscrwAmt:", typeof escrowAmount);
+          console.log("loggedEscrwAmt:", escrowAmount);
+          const newEscrwAmt = escrowAmount * BigInt(10 ** 14);
+          console.log("newEscrwAmt:", newEscrwAmt);
           localStorage.setItem("escrowId", escrowId);
-          localStorage.setItem("escrowAmt", escrowAmount);
+          localStorage.setItem("escrowAmt", newEscrwAmt);
 
           console.log("Escrow ID:", escrowId);
         }
@@ -76,7 +84,7 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
       const giigId = localStorage.getItem("gig_id");
       localStorage.removeItem("escrowId");
       localStorage.removeItem("gig_id");
-
+      localStorage.setItem("createdEscrowId", escrowId);
       console.log("fetched-gigIdAfter:", giigId);
       console.log("fetched-escrowIdAfter:", escrowId);
       const { data, error } = await supabase
@@ -97,7 +105,6 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
     }, 12000);
   };
 
-  var createdEscrowId;
   const createEscrow = async () => {
     const escrowTx = await writeContract(connectConfig, {
       abi: blanceAbi,
@@ -110,7 +117,11 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
     console.log("freelancerAddr:", freelancerAddr);
 
     await watchEvent();
-    setTimeout(async () => {}, 5000);
+    setTimeout(async () => {
+      closeModal();
+
+      setIsSuccessModalOpen(true);
+    }, 5000);
   };
 
   const account = getAccount(connectConfig);
@@ -219,19 +230,11 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
                           Create Escrow
                         </div>
                       </div>
-                      {expandModal && (
-                        <div className="my-3">
-                          <div className="flex items-center gap-5">
-                            <p>Escrow Id Successfully Created</p>
-                            {`EscrowId:${createdEscrowId}`}
-                          </div>
-                          <button
-                            type="submit"
-                            className="text-lg font-semibold border border-blue-600 w-full py-2 rounded-md bg-blue-100 hover:bg-blue-200"
-                          >
-                            Deposit Escrow-Amount
-                          </button>
-                        </div>
+                      {isSuccessModalOpen && (
+                        <EscrowSuccessModal
+                          isOpen={isSuccessModalOpen}
+                          setIsOpen={setIsSuccessModalOpen}
+                        />
                       )}
                     </div>
                   </form>

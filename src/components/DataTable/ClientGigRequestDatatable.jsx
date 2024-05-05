@@ -11,7 +11,7 @@ import "primereact/resources/primereact.min.css";
 
 import supabase from "../../config/supabaseConfig";
 import { writeContract } from "@wagmi/core";
-import { parseEther } from "viem";
+import { parseEther, parseUnits } from "viem";
 import { connectConfig } from "../../ConnectKit/Web3Provider";
 import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
 
@@ -59,6 +59,7 @@ const ClientGigRequestDatatable = () => {
         walletAddress: "233232",
         rating: 4,
         appliedGigStatus: item?.status,
+        ...item,
       }));
       const gigDataIndex = data.length - 1;
       console.log("gigDataIndex:", gigDataIndex);
@@ -126,14 +127,20 @@ const ClientGigRequestDatatable = () => {
     }
   };
 
-  const escrowDeposit = async () => {
-    const escrowId = localStorage.getItem("freelancerEscrwId");
-    const escrowAmount = localStorage.getItem("freelancerEscrwAmt");
+  const escrowDeposit = async (rowData) => {
+    console.log("rowData", rowData);
+    const escrowId = rowData.escrow_id;
+    const escrowAmount = rowData.escrow_amount;
     localStorage.removeItem("freelancerEscrwId");
     localStorage.removeItem("freelancerEscrwAmt");
     console.log("escrowAmt type:", typeof escrowAmount);
     const actualEscrwAmt = parseInt(escrowAmount, 10);
     console.log("actual-escrwAmt:", actualEscrwAmt);
+    const newEscrwAmt = actualEscrwAmt / 10 ** 5;
+    // console.log("escrowAmt-converted:", escrowAmtConverted);
+    // console.log("escrowAmt-converted type:", typeof escrowAmtConverted);
+    console.log("newEscrowAmt:", newEscrwAmt);
+
     console.log("actual-escrowAmt type:", typeof actualEscrwAmt);
 
     const escrowTx = await writeContract(connectConfig, {
@@ -141,11 +148,11 @@ const ClientGigRequestDatatable = () => {
       address: blanceAddress,
       functionName: "escrowDeposited",
       args: [escrowId],
-      value: parseEther(actualEscrwAmt.toString()),
+      value: parseEther(newEscrwAmt.toString()),
     });
   };
   const depositEscrow = (rowData) => {
-    escrowDeposit();
+    escrowDeposit(rowData);
     alert("Escrow Amount Deposited");
     setExpandedRows(null);
     updateGigStatus(rowData, "Completed");
