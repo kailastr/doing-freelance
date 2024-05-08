@@ -158,7 +158,8 @@ const ClientGigRequestDatatable = () => {
     setGigRequestData(updatedData);
   };
 
-  const rowExpansionTemplate = (data) => {
+  const rowExpansionTemplate = (data, index) => {
+    console.log(index);
     return (
       <div className="p-3 text-black mx-3 bg-red-100 rounded-md">
         <h5 className="font-semibold text-lg my-3">
@@ -239,7 +240,7 @@ const ClientGigRequestDatatable = () => {
         value={gigRequestData}
         expandedRows={expandedRows}
         header={header}
-        rowExpansionTemplate={rowExpansionTemplate}
+        rowExpansionTemplate={(data, index) => rowExpansionTemplate(data, index)}
         onRowToggle={(e) => setExpandedRows(e.data)}
       >
         <Column expander style={{ width: "3rem" }} />
