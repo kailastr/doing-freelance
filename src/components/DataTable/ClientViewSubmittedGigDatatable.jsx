@@ -129,7 +129,7 @@ const ClientViewSubmittedGigDatatable = () => {
       .update({
         dispute_status: "OnDispute",
       })
-      .eq("gig_id", actualDisputedGigId)
+      .eq("gig_id", rowData.gig_id)
       .select();
     if (error) {
       console.error("Error updating column:", error);

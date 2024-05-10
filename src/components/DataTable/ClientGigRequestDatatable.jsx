@@ -25,6 +25,7 @@ const ClientGigRequestDatatable = () => {
   const [escrowUserId, setEscrowUserId] = useState("");
   const [fetchError, setFetchError] = useState(null);
   const [gigData, setGigdata] = useState([]);
+  const [indexedData, setIndexedData] = useState([]);
   useEffect(() => {
     const fetchGigs = async () => {
       //   const { data, error } = await supabase.from("DF-CreatedGig").select();
@@ -140,6 +141,7 @@ const ClientGigRequestDatatable = () => {
     // console.log("escrowAmt-converted:", escrowAmtConverted);
     // console.log("escrowAmt-converted type:", typeof escrowAmtConverted);
     console.log("newEscrowAmt:", newEscrwAmt);
+    console.log("escrowIdd:", escrowId);
 
     console.log("actual-escrowAmt type:", typeof actualEscrwAmt);
 
@@ -165,7 +167,9 @@ const ClientGigRequestDatatable = () => {
     setGigRequestData(updatedData);
   };
 
-  const rowExpansionTemplate = (data) => {
+  const rowExpansionTemplate = (data, dataIndex) => {
+    // setDataIndex(dataIndex?.index);
+    console.log("dataIndex:", dataIndex.index);
     return (
       <div className="p-3 text-black mx-3 bg-red-100 rounded-md">
         <h5 className="font-semibold text-lg my-3">
@@ -188,6 +192,8 @@ const ClientGigRequestDatatable = () => {
           Applied Gig Status:{" "}
           <Tag value={data.appliedGigStatus} severity="info" />
         </div>
+        {console.log("daata:", data)}
+        {setIndexedData(data)}
         {data.appliedGigStatus === "Pending" && (
           <div className="flex gap-3 mt-2">
             <button
@@ -246,7 +252,9 @@ const ClientGigRequestDatatable = () => {
         value={gigRequestData}
         expandedRows={expandedRows}
         header={header}
-        rowExpansionTemplate={rowExpansionTemplate}
+        rowExpansionTemplate={(data, dataIndex) =>
+          rowExpansionTemplate(data, dataIndex)
+        }
         onRowToggle={(e) => setExpandedRows(e.data)}
       >
         <Column expander style={{ width: "3rem" }} />
@@ -260,6 +268,7 @@ const ClientGigRequestDatatable = () => {
         isOpen={isEscrowOpen}
         setIsOpen={setIsEscrowOpen}
         userId={escrowUserId}
+        indexedData={indexedData}
       />
     </div>
   );

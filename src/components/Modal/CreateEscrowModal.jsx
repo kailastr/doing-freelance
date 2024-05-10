@@ -9,7 +9,7 @@ import { connectConfig } from "../../ConnectKit/Web3Provider";
 import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
 import supabase from "../../config/supabaseConfig";
 
-const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
+const CreateEscrow = ({ isOpen, setIsOpen, userId, indexedData }) => {
   const [expandModal, setExpandModal] = useState(false);
 
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -18,6 +18,7 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
   const [escrowDeadline, setEscrowDeadline] = useState("");
   const [escrowAmount, setEscrowAmount] = useState("");
   const [depositEscrowId, setDeopiteEscrowId] = useState("");
+  const [daata, setAllData] = useState([]);
 
   const numSeconds = 86400;
   var createdEscrowId;
@@ -34,12 +35,8 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
     )
   `
       );
-    console.log("freelancerGigData", data);
-    var gigIdIndex = data.length - 1;
-    console.log("data-length:", gigIdIndex);
-    const gigId = data[gigIdIndex].gig_id;
-    console.log("GIGID:", gigId);
-    localStorage.setItem("gig_id", gigId);
+    console.log("freelancerGigData:", data);
+    setAllData[data];
   };
   useEffect(() => {
     fetchGigId();
@@ -84,17 +81,17 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
       const giigId = localStorage.getItem("gig_id");
       localStorage.removeItem("escrowId");
       localStorage.removeItem("gig_id");
-      localStorage.setItem("createdEscrowId", escrowId);
       console.log("fetched-gigIdAfter:", giigId);
+      localStorage.setItem("createdEscrowId", escrowId);
       console.log("fetched-escrowIdAfter:", escrowId);
       const { data, error } = await supabase
         .from("DF-FreelancerAppliedGigs")
         .update({
           status: "Accepted",
-          escrow_id: escrowId,
-          escrow_amount: escrowAmount,
+          escrow_id: indexedData?.escrow_id,
+          escrow_amount: indexedData?.escrow_amount,
         })
-        .eq("gig_id", giigId)
+        .eq("gig_id", indexedData?.gig_id)
         .select();
 
       if (error) {
@@ -106,6 +103,9 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId }) => {
   };
 
   const createEscrow = async () => {
+    console.log("escrowDeadline1:", escrowDeadline);
+    console.log("escrowAmt1:", escrowAmount);
+    console.log("freelancerAddr1:", freelancerAddr);
     const escrowTx = await writeContract(connectConfig, {
       abi: blanceAbi,
       address: blanceAddress,
