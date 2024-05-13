@@ -21,6 +21,7 @@ const FreelancerAppliedGigDatatable = () => {
   const [escrowUserId, setEscrowUserId] = useState("");
   const [gigApplicationData, setGigApplicationData] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
+  const [submittedData, setSumbittedData] = useState([]);
   const toast = useRef(null);
 
   useEffect(() => {
@@ -52,6 +53,7 @@ const FreelancerAppliedGigDatatable = () => {
           name: item?.["DF-FreelancerProfile"]?.FirstName,
           deadline: item?.["DF-CreatedGig"]?.Date,
           escrowId: item?.escrow_id,
+          gigId: item?.gig_id,
           description: item?.["DF-CreatedGig"]?.Description,
           badgeCoins: 650,
           languagesKnown: item?.["DF-FreelancerProfile"]?.Languages,
@@ -75,23 +77,26 @@ const FreelancerAppliedGigDatatable = () => {
     fetchGigData();
   }, []);
   const SubmitProject = async (rowData) => {
-    const escrowId = localStorage.getItem("freelancerEscrowId");
+    setSumbittedData(rowData);
+    console.log("userrrData:", rowData);
+    // const escrowId = localStorage.getItem("freelancerEscrowId");
     localStorage.removeItem("freelancerEscrowId");
+    console.log("roowData:", rowData);
     const submitGig = await writeContract(connectConfig, {
       abi: blanceAbi,
       address: blanceAddress,
       functionName: "submitFinishedGig",
-      args: [escrowId],
+      args: [rowData.escrowId],
     });
     // const { data, error } = await supabase
-    // .from("DF-FreelancerAppliedGigs")
-    // .update({
-    //   status: "Accepted",
-    //   escrow_id: escrowId,
-    //   escrow_amount: escrowAmount,
-    // })
-    // .eq("gig_id", giigId)
-    // .select();
+    //   .from("DF-FreelancerAppliedGigs")
+    //   .update({
+    //     status: "Accepted",
+    //     escrow_id: rowData.escrowId,
+    //     escrow_amount: escrowAmount,
+    //   })
+    //   .eq("gig_id", giigId)
+    //   .select();
     const confirmation = window.confirm(
       "Is your project completed to submit ?"
     );
@@ -149,6 +154,7 @@ const FreelancerAppliedGigDatatable = () => {
             >
               Submit Project
             </button>
+            {console.log("submitDataa:", data)}
           </div>
         )}
         {data.appliedGigStatus === "Submitted" && (
@@ -189,6 +195,7 @@ const FreelancerAppliedGigDatatable = () => {
         isOpen={isSubmitEscrowOpen}
         setIsOpen={setIsSubmitEscrowOpen}
         userId={escrowUserId}
+        userData={submittedData}
       />
     </div>
   );

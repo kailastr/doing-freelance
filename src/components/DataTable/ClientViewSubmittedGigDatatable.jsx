@@ -67,11 +67,11 @@ const ClientViewSubmittedGigDatatable = () => {
       }));
       const gigDataIndex = data.length - 1;
       console.log("gigDataIndex:", gigDataIndex);
-      const escrowId = data[gigDataIndex].escrow_id;
+      const escrowId = data[gigDataIndex]?.escrow_id;
       console.log("fetchedEscrowId:", escrowId);
-      const escrowAmount = data[gigDataIndex].escrow_amount;
+      const escrowAmount = data[gigDataIndex]?.escrow_amount;
       console.log("fetchedEscrowAmt:", escrowAmount);
-      const gigIdd = data[gigDataIndex].gig_id;
+      const gigIdd = data[gigDataIndex]?.gig_id;
       localStorage.setItem("disputedGigId", gigIdd);
 
       localStorage.setItem("freelancerEscroowId", escrowId);

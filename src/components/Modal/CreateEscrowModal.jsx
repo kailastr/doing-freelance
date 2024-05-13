@@ -108,7 +108,7 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId, indexedData, index }) => {
       } else {
         console.log("Enum column updated successfully:", data);
       }
-    }, 12000);
+    }, 17000);
   };
 
   const createEscrow = async () => {
