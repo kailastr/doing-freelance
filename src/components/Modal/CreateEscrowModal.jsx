@@ -9,7 +9,7 @@ import { connectConfig } from "../../ConnectKit/Web3Provider";
 import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
 import supabase from "../../config/supabaseConfig";
 
-const CreateEscrow = ({ isOpen, setIsOpen, userId, indexedData }) => {
+const CreateEscrow = ({ isOpen, setIsOpen, userId, indexedData, index }) => {
   const [expandModal, setExpandModal] = useState(false);
 
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -36,6 +36,14 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId, indexedData }) => {
   `
       );
     console.log("freelancerGigData:", data);
+    console.log("freelancerGigData", data);
+    var gigIdIndex = data.length - 1;
+    console.log("data-length:", gigIdIndex);
+    console.log("wholeIndexedData:", indexedData);
+    console.log("gig_Index:", index);
+    const gigId = data[index]?.gig_id;
+    console.log("GIGID:", gigId);
+    localStorage.setItem("gig_id", gigId);
     setAllData[data];
   };
   useEffect(() => {
@@ -84,12 +92,13 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId, indexedData }) => {
       console.log("fetched-gigIdAfter:", giigId);
       localStorage.setItem("createdEscrowId", escrowId);
       console.log("fetched-escrowIdAfter:", escrowId);
+      console.log("fetched-indexData:", indexedData);
       const { data, error } = await supabase
         .from("DF-FreelancerAppliedGigs")
         .update({
           status: "Accepted",
-          escrow_id: indexedData?.escrow_id,
-          escrow_amount: indexedData?.escrow_amount,
+          escrow_id: escrowId, //indexedData?.escrow_id
+          escrow_amount: escrowAmount, //indexedData?.escrow_amount
         })
         .eq("gig_id", indexedData?.gig_id)
         .select();

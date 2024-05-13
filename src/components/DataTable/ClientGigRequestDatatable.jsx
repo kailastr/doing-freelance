@@ -26,6 +26,7 @@ const ClientGigRequestDatatable = () => {
   const [fetchError, setFetchError] = useState(null);
   const [gigData, setGigdata] = useState([]);
   const [indexedData, setIndexedData] = useState([]);
+  const [dataIndex, setDataIndex] = useState();
   useEffect(() => {
     const fetchGigs = async () => {
       //   const { data, error } = await supabase.from("DF-CreatedGig").select();
@@ -168,7 +169,7 @@ const ClientGigRequestDatatable = () => {
   };
 
   const rowExpansionTemplate = (data, dataIndex) => {
-    // setDataIndex(dataIndex?.index);
+    setDataIndex(dataIndex?.index);
     console.log("dataIndex:", dataIndex.index);
     return (
       <div className="p-3 text-black mx-3 bg-red-100 rounded-md">
@@ -269,6 +270,7 @@ const ClientGigRequestDatatable = () => {
         setIsOpen={setIsEscrowOpen}
         userId={escrowUserId}
         indexedData={indexedData}
+        index={dataIndex}
       />
     </div>
   );
