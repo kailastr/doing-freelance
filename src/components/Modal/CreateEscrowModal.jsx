@@ -243,6 +243,7 @@ const CreateEscrow = ({ isOpen, setIsOpen, userId, indexedData, index }) => {
                         <EscrowSuccessModal
                           isOpen={isSuccessModalOpen}
                           setIsOpen={setIsSuccessModalOpen}
+                          isEscrowSuccess={true}
                         />
                       )}
                     </div>

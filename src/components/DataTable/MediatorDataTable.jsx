@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 
+//component
+import EscrowSuccessModal from "../Modal/EscrowSuccessModal";
+
 //primereact
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -13,7 +16,7 @@ import supabase from "../../config/supabaseConfig";
 
 const MediatorDataTable = () => {
   const Email = localStorage.getItem("userEmail");
-  const [isEscrowOpen, setIsEscrowOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [escrowUserId, setEscrowUserId] = useState("");
   const [fetchError, setFetchError] = useState(null);
@@ -66,27 +69,11 @@ const MediatorDataTable = () => {
       "Are you sure you want to resolve this gig dispute ?"
     );
     if (confirmation) {
-      setIsEscrowOpen(true);
+      setIsModalOpen(true);
       setEscrowUserId(rowData.name);
       setExpandedRows(null);
       updateGigStatus(rowData, "Completed");
     }
-  };
-
-  const RejectGig = (rowData) => {
-    const confirmation = window.confirm(
-      "Are you sure you want to reject this gig request?"
-    );
-    if (confirmation) {
-      setExpandedRows(null);
-      updateGigStatus(rowData, "Rejected");
-    }
-  };
-
-  const deposieEscrow = (rowData) => {
-    alert("Escrow Amount Deposited");
-    setExpandedRows(null);
-    updateGigStatus(rowData, "Completed");
   };
 
   const updateGigStatus = (rowData, status) => {
@@ -135,6 +122,7 @@ const MediatorDataTable = () => {
 
   return (
     <div className="card">
+    <EscrowSuccessModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} isEscrowSuccess={false} />
       <Toast ref={toast} />
       <DataTable
         value={gigData}

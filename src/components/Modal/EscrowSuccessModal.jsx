@@ -7,7 +7,7 @@ import { Fragment, useState } from "react";
 //icon
 import { MdOutlineDoneOutline } from "react-icons/md";
 
-const EscrowSuccessModal = ({ isOpen, setIsOpen }) => {
+const EscrowSuccessModal = ({ isOpen, setIsOpen, isEscrowSuccess }) => {
   // let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -16,6 +16,12 @@ const EscrowSuccessModal = ({ isOpen, setIsOpen }) => {
 
   function openModal() {
     setIsOpen(true);
+  }
+
+  if (isEscrowSuccess) {
+    var message = "Escrow Successfully created";
+  } else {
+    var message = "Dispute Successfully Resolved";
   }
 
   return (
@@ -58,7 +64,7 @@ const EscrowSuccessModal = ({ isOpen, setIsOpen }) => {
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <div className="mt-2 flex items-center justify-center gap-5">
                     <p className="text-lg text-green-500">
-                      Escrow Successfully created
+                      {message}
                     </p>
                     <MdOutlineDoneOutline className=" bg-green-500 text-white border-2 h-10 w-10 rounded-full p-2" />
                   </div>
