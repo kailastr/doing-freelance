@@ -194,7 +194,7 @@ const AddNewGigCard = () => {
             <input
               type="reset"
               className="border-2 border-red-700 w-24 rounded-lg font-semibold hover:bg-red-200 transition duration-300 ease-in-out px-3 py-2"
-              value={"Cancle"}
+              value={"Cancel"}
             />
           </div>
         </div>

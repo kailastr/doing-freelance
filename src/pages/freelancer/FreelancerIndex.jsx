@@ -23,7 +23,7 @@ const FreelancerIndex = () => {
       if (data) {
         setGigs(data);
         setFetchError(null);
-        console.log(data);
+        console.log("data:", data);
       }
     };
 

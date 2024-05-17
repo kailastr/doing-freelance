@@ -19,14 +19,16 @@ const ClientProfile = () => {
   const [fetchError, setFetchError] = useState(null);
   const [userProfile, setUserProfile] = useState([]);
   const [userId, setUserId] = useState();
+  const [fetchBio, setFetchBio] = useState([]);
 
   const Email = localStorage.getItem("userEmail");
   useEffect(() => {
+    console.log("emailId:", Email);
     const fetchUser = async () => {
       const { data, error } = await supabase
         .from("DF-UserProfile")
         .select("*")
-        .eq("Email", Email)
+        .eq("mailId", Email)
         .single();
 
       if (error) {
@@ -34,8 +36,11 @@ const ClientProfile = () => {
         console.log(error);
       }
       if (data) {
+        setFetchBio(data);
+
         setUserProfile(data);
         setFetchError(null);
+        console.log("fetchBio:", fetchBio);
         console.log(data);
       }
     };
@@ -116,7 +121,8 @@ const ClientProfile = () => {
       <div>
         <div className="flex justify-center my-10">
           <h1 className="text-xl font-semibold">
-            Hey {user.FirstName}, Welcome to DoingFreelance
+            {`Hey ${fetchBio?.fullName || "Loading..."}, Welcome to
+            DoingFreelance`}
           </h1>
         </div>
         <div className="flex justify-center my-5 sticky top-24">
@@ -151,7 +157,9 @@ const ClientProfile = () => {
                 alt="Profile Icon"
                 className="w-36 h-36 mx-auto my-3 rounded-full"
               />
-              <h3 className="mx-auto font-medium text-md">{`Name : ${user.FirstName} ${user.MiddleName} ${user.LastName}`}</h3>
+              <h3 className="mx-auto font-medium text-md">{`Name : ${
+                fetchBio?.fullName || "Loading..."
+              }`}</h3>
               <div className="flex justify-center gap-2">
                 <IoIosInformationCircleOutline
                   className="my-auto text-xl"
@@ -168,12 +176,7 @@ const ClientProfile = () => {
             <div className="w-8/12 flex flex-col my-5 px-10">
               <div>
                 <h3 className="text-lg font-semibold">About me : </h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Inventore architecto culpa ab, expedita alias dolores tenetur
-                  perferendis deleniti voluptas fugiat ut ipsa? Deleniti culpa
-                  quibusdam nemo itaque eveniet neque reprehenderit.
-                </p>
+                <p>{fetchBio?.userBio || "Loading..."}</p>
               </div>
               <div className="flex gap-10 my-3 font-semibold">
                 <div className="flex gap-2">

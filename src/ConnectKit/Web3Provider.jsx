@@ -14,7 +14,7 @@ const walletConnectProjectId = process.env.WALLETCONNECT_PROJECT_ID; // Ensure y
 
 export const connectConfig = createConfig(
   getDefaultConfig({
-    chains: [baseSepolia],
+    chains: [sepolia],
     walletConnectProjectId,
     appName: "Doing-Freelance",
   })

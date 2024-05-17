@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import supabase from "../../config/supabaseConfig";
 import { useEffect } from "react";
 
-const SubmitEscrowProject = ({ isOpen, setIsOpen, userId }) => {
+const SubmitEscrowProject = ({ isOpen, setIsOpen, userId, userData }) => {
   const [projectUrl, setProjectUrl] = useState("");
 
   function closeModal() {
@@ -38,6 +38,7 @@ const SubmitEscrowProject = ({ isOpen, setIsOpen, userId }) => {
     }
   };
   useEffect(() => {
+    console.log("userDataLogCheythath:", userData);
     fetchGigData();
   });
   const giigId = localStorage.getItem("freelancergigId");
@@ -51,7 +52,7 @@ const SubmitEscrowProject = ({ isOpen, setIsOpen, userId }) => {
     const { data, error } = await supabase
       .from("DF-FreelancerAppliedGigs")
       .update({ status: "Submitted", project_link: projectUrl })
-      .eq("gig_id", actualGigId)
+      .eq("gig_id", userData?.gigId)
       .select();
     if (error) {
       console.error("Error updating column:", error);

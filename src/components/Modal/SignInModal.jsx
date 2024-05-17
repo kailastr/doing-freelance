@@ -117,11 +117,13 @@ const SignInModal = ({ isOpen, setIsOpen }) => {
         if (data.userType === "client") {
           closeModal();
           navigation("/client");
-          localStorage.setItem("userEmail", `${email}`);
+          localStorage.setItem("userEmail", email);
+          console.log("userMail:", { email });
         } else {
           closeModal();
           navigation("/freelancer");
-          localStorage.setItem("userEmail", `${email}`);
+          localStorage.setItem("userEmail", email);
+          console.log("userMail:", email);
         }
         // Optionally, you can navigate to a different page or show a success message
       }

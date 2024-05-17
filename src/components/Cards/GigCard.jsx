@@ -39,6 +39,7 @@ const GigCard = (props) => {
         },
       ])
       .select();
+
     console.log("data:", data);
   };
   const applyGig = async () => {

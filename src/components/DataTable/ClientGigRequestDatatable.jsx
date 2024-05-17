@@ -11,7 +11,7 @@ import "primereact/resources/primereact.min.css";
 
 import supabase from "../../config/supabaseConfig";
 import { writeContract } from "@wagmi/core";
-import { parseEther } from "viem";
+import { parseEther, parseUnits } from "viem";
 import { connectConfig } from "../../ConnectKit/Web3Provider";
 import { blanceAbi, blanceAddress } from "../../contractAbi/blance";
 
@@ -25,6 +25,8 @@ const ClientGigRequestDatatable = () => {
   const [escrowUserId, setEscrowUserId] = useState("");
   const [fetchError, setFetchError] = useState(null);
   const [gigData, setGigdata] = useState([]);
+  const [indexedData, setIndexedData] = useState([]);
+  const [dataIndex, setDataIndex] = useState();
   useEffect(() => {
     const fetchGigs = async () => {
       //   const { data, error } = await supabase.from("DF-CreatedGig").select();
@@ -59,6 +61,7 @@ const ClientGigRequestDatatable = () => {
         walletAddress: "233232",
         rating: 4,
         appliedGigStatus: item?.status,
+        ...item,
       }));
       const gigDataIndex = data.length - 1;
       console.log("gigDataIndex:", gigDataIndex);
@@ -126,14 +129,21 @@ const ClientGigRequestDatatable = () => {
     }
   };
 
-  const escrowDeposit = async () => {
-    const escrowId = localStorage.getItem("freelancerEscrwId");
-    const escrowAmount = localStorage.getItem("freelancerEscrwAmt");
+  const escrowDeposit = async (rowData) => {
+    console.log("rowData", rowData);
+    const escrowId = rowData.escrow_id;
+    const escrowAmount = rowData.escrow_amount;
     localStorage.removeItem("freelancerEscrwId");
     localStorage.removeItem("freelancerEscrwAmt");
     console.log("escrowAmt type:", typeof escrowAmount);
     const actualEscrwAmt = parseInt(escrowAmount, 10);
     console.log("actual-escrwAmt:", actualEscrwAmt);
+    const newEscrwAmt = actualEscrwAmt / 10 ** 5;
+    // console.log("escrowAmt-converted:", escrowAmtConverted);
+    // console.log("escrowAmt-converted type:", typeof escrowAmtConverted);
+    console.log("newEscrowAmt:", newEscrwAmt);
+    console.log("escrowIdd:", escrowId);
+
     console.log("actual-escrowAmt type:", typeof actualEscrwAmt);
 
     const escrowTx = await writeContract(connectConfig, {
@@ -141,11 +151,11 @@ const ClientGigRequestDatatable = () => {
       address: blanceAddress,
       functionName: "escrowDeposited",
       args: [escrowId],
-      value: parseEther(actualEscrwAmt.toString()),
+      value: parseEther(newEscrwAmt.toString()),
     });
   };
   const depositEscrow = (rowData) => {
-    escrowDeposit();
+    escrowDeposit(rowData);
     alert("Escrow Amount Deposited");
     setExpandedRows(null);
     updateGigStatus(rowData, "Completed");
@@ -158,7 +168,9 @@ const ClientGigRequestDatatable = () => {
     setGigRequestData(updatedData);
   };
 
-  const rowExpansionTemplate = (data) => {
+  const rowExpansionTemplate = (data, dataIndex) => {
+    setDataIndex(dataIndex?.index);
+    console.log("dataIndex:", dataIndex.index);
     return (
       <div className="p-3 text-black mx-3 bg-red-100 rounded-md">
         <h5 className="font-semibold text-lg my-3">
@@ -181,6 +193,8 @@ const ClientGigRequestDatatable = () => {
           Applied Gig Status:{" "}
           <Tag value={data.appliedGigStatus} severity="info" />
         </div>
+        {console.log("daata:", data)}
+        {setIndexedData(data)}
         {data.appliedGigStatus === "Pending" && (
           <div className="flex gap-3 mt-2">
             <button
@@ -239,7 +253,9 @@ const ClientGigRequestDatatable = () => {
         value={gigRequestData}
         expandedRows={expandedRows}
         header={header}
-        rowExpansionTemplate={rowExpansionTemplate}
+        rowExpansionTemplate={(data, dataIndex) =>
+          rowExpansionTemplate(data, dataIndex)
+        }
         onRowToggle={(e) => setExpandedRows(e.data)}
       >
         <Column expander style={{ width: "3rem" }} />
@@ -253,6 +269,8 @@ const ClientGigRequestDatatable = () => {
         isOpen={isEscrowOpen}
         setIsOpen={setIsEscrowOpen}
         userId={escrowUserId}
+        indexedData={indexedData}
+        index={dataIndex}
       />
     </div>
   );

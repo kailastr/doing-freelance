@@ -62,7 +62,9 @@ const ClientGigs = () => {
   }, []);
 
   const contextActions = React.useMemo(() => {
-    const handleDelete = () => {
+    console.log("data", data);
+    console.log("selectedRows", selectedRows);
+    const handleDelete = async () => {
       if (
         window.confirm(
           `Are you sure you want to delete:\r ${selectedRows.map(
@@ -71,7 +73,33 @@ const ClientGigs = () => {
         )
       ) {
         setToggleCleared(!toggleCleared);
-        setData(_.differenceBy(data, selectedRows, "title"));
+
+        const promises = [];
+        const newPromises = [];
+
+        selectedRows.forEach((row) => {
+          promises.push(
+            supabase
+              .from("DF-FreelancerAppliedGigs")
+              .delete()
+              .eq("gig_id", row?.id)
+          );
+          newPromises.push(
+            supabase.from("DF-CreatedGig").delete().eq("id", row?.id)
+          );
+        });
+
+        const response = await Promise.all(promises);
+        console.log(response, "response");
+        const newResponse = await Promise.all(newPromises);
+        console.log(newResponse, "newResponse");
+        const selectedRowIds = selectedRows?.map((row) => row.id);
+        const newData = data?.filter(
+          (item) => !selectedRowIds?.includes(item?.id)
+        );
+        console.log("newData", newData);
+
+        setData(newData);
       }
     };
 
